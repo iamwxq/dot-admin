@@ -1,0 +1,15 @@
+.container {
+  --text-color: #{$color-primary};
+  width: 100%;
+  height: 100%;
+  color: var(--text-color);
+}
+
+.container ul {
+  @include mp-0;
+  list-style: none;
+}
+
+.camera {
+  @include icon;
+}

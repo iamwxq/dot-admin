@@ -4,7 +4,7 @@ import { Camera } from "lucide-react";
 import styles from "@/styles/pages/Home.module.scss";
 
 import { dateFormat } from "@/utils";
-import { SecondsEnum } from "@/enums/time";
+import { SecsEnum } from "@/enums/time";
 import { useGlobalStore } from "@/stores/global";
 import { DateFormatEnum } from "@/enums/format";
 
@@ -27,7 +27,7 @@ function Home() {
   useEffect(() => {
     const timer = setInterval(() => {
       setNow(Date.now());
-    }, SecondsEnum.ONE);
+    }, SecsEnum.S1);
 
     return () => clearInterval(timer);
   }, []);

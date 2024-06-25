@@ -1,7 +1,7 @@
 /**
  * @description 毫秒
  */
-export enum MilliSecsEnum {
+export enum MSecsEnum {
   MS50 = 50,
   MS100 = 100,
   MS150 = 150,
@@ -26,7 +26,7 @@ export enum MilliSecsEnum {
 /**
  * @description 秒
  */
-export enum SecondsEnum {
+export enum SecsEnum {
   S1 = 1_000,
   S10 = 10_000,
   S30 = 30_000,
@@ -36,7 +36,7 @@ export enum SecondsEnum {
 /**
  * @description 分
  */
-export enum MinutesEnum {
+export enum MinsEnum {
   M1 = 60_000,
   M10 = 600_000,
   M30 = 1_800_000,

@@ -9,7 +9,7 @@ export async function useDownload(
 ) {
   const notification = useNotification();
 
-  if (notify && notification) {
+  if (notify) {
     notification.info({
       message: "温馨提示",
       description: "如果数据庞大会导致下载缓慢哦，请您耐心等待！",

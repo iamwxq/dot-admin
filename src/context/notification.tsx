@@ -20,5 +20,5 @@ export function NotificationProvider({ children }: NotificationProviderProps) {
 };
 
 export function useNotification() {
-  return React.useContext(NotificationContext);
+  return React.useContext(NotificationContext) as NotificationInstance;
 }

@@ -1,5 +1,16 @@
 import { useNotification } from "@/context/notification";
 
+/**
+ * 调用下载 API
+ *
+ * @param api 接口
+ * @param filename 下载文件名
+ * @param params 接口参数
+ * @param notify 是否要弹出下载提示气泡
+ * @param fileType 文件类型
+ *
+ * @example useDownload(api, 'user-list', { id }, false, '.pdf');
+ */
 export async function useDownload(
   api: (...args: any) => Promise<any>,
   filename: string,

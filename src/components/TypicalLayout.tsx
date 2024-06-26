@@ -1,6 +1,6 @@
-import { Layout } from "antd";
+// import { Layout } from "antd";
 
-const { Header, Content, Footer, Sider } = Layout;
+// const { Header, Content, Footer, Sider } = Layout;
 
 function TypicalLayout() {
   return (

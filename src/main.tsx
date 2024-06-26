@@ -1,9 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App.tsx";
+
+import App from "@/App.tsx";
 
 async function enableMocking() {
-  if (import.meta.env.VITE_APP_MOCK === "on") {
+  if (import.meta.env.VITE_APP_MOCK === "true") {
     const { worker } = await import("./mocks/browser");
     return worker.start();
   }

@@ -1,3 +1,3 @@
 declare interface ViteEnv {
-  VITE_MOCK: "on" | "off";
+  VITE_APP_MOCK: "on" | "off";
 }

@@ -21,9 +21,7 @@
     { "rule": "*-dangle", "severity": "off" },
     { "rule": "*-newline", "severity": "off" },
     { "rule": "*quotes", "severity": "off" },
-    { "rule": "*semi", "severity": "off" },
-
-    { "rule": "vue/max-attributes-per-line", "severity": "off" }
+    { "rule": "*semi", "severity": "off" }
   ],
 
   // Enable eslint for all supported languages
@@ -44,7 +42,6 @@
   ],
 
   "css.validate": true,
-  "css.lint.unknownAtRules": "ignore",
   "css.format.maxPreserveNewLines": 1,
   "css.format.newlineBetweenRules": true,
   "css.format.newlineBetweenSelectors": true,
@@ -53,7 +50,6 @@
     "editor.defaultFormatter": "vscode.css-language-features"
   },
   "scss.validate": true,
-  "scss.lint.unknownAtRules": "ignore",
   "scss.format.maxPreserveNewLines": 1,
   "scss.format.newlineBetweenRules": true,
   "scss.format.newlineBetweenSelectors": true,

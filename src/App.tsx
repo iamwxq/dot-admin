@@ -1,4 +1,4 @@
-import { NotificationProvider } from "@/context/notification";
+import { NotificationProvider } from "@/contexts/notification";
 
 import Home from "@/pages/Home";
 

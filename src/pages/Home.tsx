@@ -7,6 +7,7 @@ import { dateFormat } from "@/utils";
 import { SecsEnum } from "@/enums/time";
 import { useGlobalStore } from "@/stores/global";
 import { DateFormatEnum } from "@/enums/format";
+import { ContentTypeEnum } from "@/enums/http";
 
 function Home() {
   const [now, setNow] = useState(() => Date.now());
@@ -15,13 +16,22 @@ function Home() {
   const switchLayout = useGlobalStore.use.switchLayout();
 
   function handleSwitchLayout() {
-    fetch("https://examples.com/user")
-      .then(res => res.json())
-      .then(data => console.info(data));
+    fetch("http://localhost:23012/sys/login", {
+      method: "POST",
+      headers: { "Content-Type": ContentTypeEnum.JSON },
+      body: JSON.stringify({ account: "admin", password: "dot001" }),
+    });
 
     if (layout === "horizontal")
       switchLayout("vertical");
     else switchLayout("horizontal");
+  }
+
+  function logout() {
+    fetch("http://localhost:23012/sys/logout", {
+      method: "POST",
+      headers: { "Content-Type": ContentTypeEnum.JSON },
+    });
   }
 
   useEffect(() => {
@@ -49,6 +59,7 @@ function Home() {
 
       <div>
         <button type="button" onClick={handleSwitchLayout}>click it</button>
+        <button type="button" onClick={logout}>logout</button>
       </div>
     </div>
   );

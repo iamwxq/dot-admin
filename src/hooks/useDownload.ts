@@ -29,8 +29,8 @@ export async function useDownload(
   }
 
   try {
-    const res = await api(params);
-    const blob = new Blob([res]);
+    const buffer = await api(params);
+    const blob = new Blob([buffer]);
 
     // edge
     const nav = window.navigator as any;

@@ -1,3 +1,5 @@
+/// <reference types="vitest"/>
+
 import path from "node:path";
 import process from "node:process";
 import { defineConfig, loadEnv } from "vite";
@@ -71,5 +73,6 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
         },
       },
     },
+    test: {},
   };
 });

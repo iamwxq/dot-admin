@@ -17,7 +17,7 @@
     "build": "tsc && vite build",
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "test": "vitest --config vitest.config.ts",
+    "test": "vitest",
     "msw:init": "pnpx msw init public",
     "taze": "pnpx taze",
     "taze:major": "pnpx taze major"

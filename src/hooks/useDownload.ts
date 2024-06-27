@@ -11,8 +11,8 @@ import { useNotification } from "@/contexts/notification";
  *
  * @example useDownload(api, 'user-list', { id }, false, '.pdf');
  */
-export async function useDownload(
-  api: (...args: any) => Promise<any>,
+export async function useDownload<T extends (...args: any) => Promise<any>>(
+  api: T,
   filename: string,
   params?: Parameters<typeof api>,
   notify: boolean = true,

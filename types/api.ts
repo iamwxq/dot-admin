@@ -5,3 +5,17 @@ export interface Result<T = any> {
   message: string;
   data: T | null;
 }
+
+export interface PParams<T> {
+  page: number;
+  limit: number;
+  orderField: Exclude<keyof T, "id">;
+  order: "asc" | "desc";
+}
+
+export interface PRes<T> {
+  page: number;
+  size: number;
+  total: number;
+  list: T[];
+}

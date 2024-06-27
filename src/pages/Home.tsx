@@ -16,7 +16,7 @@ function Home() {
   const switchLayout = useGlobalStore.use.switchLayout();
 
   function handleSwitchLayout() {
-    fetch("http://localhost:23012/sys/login", {
+    fetch("http://localhost:23012/sys/auth/login", {
       method: "POST",
       headers: { "Content-Type": ContentTypeEnum.JSON },
       body: JSON.stringify({ account: "admin", password: "dot001" }),

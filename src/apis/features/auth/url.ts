@@ -1,4 +1,4 @@
-export const url = {
-  login: "/sys/login",
-  logout: "/sys/logout",
+export enum AuthUrl {
+  Login = "/sys/auth/login",
+  Logout = "/sys/auth/logout",
 };

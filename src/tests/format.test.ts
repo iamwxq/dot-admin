@@ -1,7 +1,7 @@
 import { expect, it } from "vitest";
 import dayjs from "dayjs";
 
-import { dateFormat } from "..";
+import { dateFormat } from "@/utils";
 import { DateFormatEnum } from "@/enums/format";
 
 it("should be YYYY-MM-DD HH:mm:ss", () => {

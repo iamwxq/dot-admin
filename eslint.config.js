@@ -15,7 +15,6 @@ export default antfu(
   {
     rules: {
       "react/prop-types": "off",
-      "react-hooks/rules-of-hooks": "off",
       "react-refresh/only-export-components": "off",
       "style/jsx-one-expression-per-line": "off",
       "style/jsx-sort-props": [

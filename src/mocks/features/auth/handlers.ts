@@ -1,7 +1,7 @@
-import { HttpResponse, http } from "msw";
+import { HttpResponse } from "msw";
 import type { HttpHandler } from "msw";
-import { fail, success } from "@/mocks";
 import { CodeEnum } from "@/enums/http";
+import { fail, httpPost, success } from "@/mocks";
 import { AuthUrl } from "@/apis/features/auth/url";
 import { loginData } from "@/mocks/features/auth/data";
 import type { LoginParams } from "@/apis/features/auth/interface";
@@ -9,7 +9,7 @@ import type { LoginParams } from "@/apis/features/auth/interface";
 /**
  * @description 登录
  */
-const login: HttpHandler = http.post(AuthUrl.Login, async ({ request }) => {
+const login: HttpHandler = httpPost(AuthUrl.Login, async ({ request }) => {
   const payload = await request.json() as LoginParams;
 
   if (payload.username === "admin" && payload.password === "dot001")
@@ -25,7 +25,7 @@ const login: HttpHandler = http.post(AuthUrl.Login, async ({ request }) => {
 /**
  * @description 登出
  */
-const logout: HttpHandler = http.post(AuthUrl.Logout, () => {
+const logout: HttpHandler = httpPost(AuthUrl.Logout, () => {
   return HttpResponse.json(success());
 });
 

@@ -7,14 +7,14 @@ export interface Result<T = any> {
 }
 
 export interface PParams<T> {
-  page: number;
-  limit: number;
+  current: number;
+  size: number;
   orderField: Exclude<keyof T, "id">;
   order: "asc" | "desc";
 }
 
 export interface PRes<T> {
-  page: number;
+  current: number;
   size: number;
   total: number;
   list: T[];

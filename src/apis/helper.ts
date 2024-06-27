@@ -1,11 +1,10 @@
-import { useMessage } from "@/contexts/message";
+import { message } from "antd";
+
 /**
  * @description: 校验网络请求状态码
  * @param {number} status
  */
 export function checkStatus(status: number) {
-  const message = useMessage();
-
   switch (status) {
     case 400:
       message.error("请求失败！请您稍后重试");

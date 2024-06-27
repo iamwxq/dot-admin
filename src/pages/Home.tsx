@@ -3,11 +3,11 @@ import { Camera } from "lucide-react";
 
 import styles from "@/styles/pages/Home.module.scss";
 
-import { dateFormat } from "@/utils";
+import { dateFormat, download } from "@/utils";
 import { SecsEnum } from "@/enums/time";
 import { useGlobalStore } from "@/stores/global";
 import { DateFormatEnum } from "@/enums/format";
-import { ContentTypeEnum } from "@/enums/http";
+import { loginApi, logoutApi } from "@/apis/features/auth";
 
 function Home() {
   const [now, setNow] = useState(() => Date.now());
@@ -15,23 +15,13 @@ function Home() {
   const layout = useGlobalStore.use.layout();
   const switchLayout = useGlobalStore.use.switchLayout();
 
-  function handleSwitchLayout() {
-    fetch("http://localhost:23012/sys/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": ContentTypeEnum.JSON },
-      body: JSON.stringify({ account: "admin", password: "dot001" }),
-    });
+  async function handleSwitchLayout() {
+    const data = await loginApi({ username: "admin", password: "dot001" });
+    console.log(data.token);
 
     if (layout === "horizontal")
       switchLayout("vertical");
     else switchLayout("horizontal");
-  }
-
-  function logout() {
-    fetch("http://localhost:23012/sys/logout", {
-      method: "POST",
-      headers: { "Content-Type": ContentTypeEnum.JSON },
-    });
   }
 
   useEffect(() => {
@@ -59,7 +49,8 @@ function Home() {
 
       <div>
         <button type="button" onClick={handleSwitchLayout}>click it</button>
-        <button type="button" onClick={logout}>logout</button>
+        <button type="button" onClick={logoutApi}>logout</button>
+        <button type="button" onClick={() => download(logoutApi, "test")}>download</button>
       </div>
     </div>
   );

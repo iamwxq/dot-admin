@@ -1,5 +1,9 @@
+import type { HttpHandler } from "msw";
+import { http } from "msw";
 import type { Result } from "#/api";
 import { CodeEnum } from "@/enums/http";
+
+const apiPrefix = import.meta.env.VITE_API_URL;
 
 /**
  * 通用响应体结果
@@ -38,4 +42,36 @@ export function success<T>(data?: T, message = "success"): Result<T> {
  */
 export function fail(reason: string = "系统异常", code = CodeEnum.ERROR): Result<null> {
   return result(null, code, reason);
+}
+
+/**
+ * @description `http.post` 的封装: 添加了从环境变量中读取的 api 前缀
+ */
+export function httpPost(...args: Parameters<typeof http.post>): HttpHandler {
+  args[0] = `${apiPrefix}${args[0]}`;
+  return http.post(...args);
+}
+
+/**
+ * @description `http.get` 的封装: 添加了从环境变量中读取的 api 前缀
+ */
+export function httpGet(...args: Parameters<typeof http.get>): HttpHandler {
+  args[0] = `${apiPrefix}${args[0]}`;
+  return http.get(...args);
+}
+
+/**
+ * @description `http.delete` 的封装: 添加了从环境变量中读取的 api 前缀
+ */
+export function httpDelete(...args: Parameters<typeof http.delete>): HttpHandler {
+  args[0] = `${apiPrefix}${args[0]}`;
+  return http.delete(...args);
+}
+
+/**
+ * @description `http.put` 的封装: 添加了从环境变量中读取的 api 前缀
+ */
+export function httpPut(...args: Parameters<typeof http.put>): HttpHandler {
+  args[0] = `${apiPrefix}${args[0]}`;
+  return http.put(...args);
 }

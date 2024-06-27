@@ -43,7 +43,7 @@ export async function download<T extends (...args: any) => Promise<any>>(
   }
 
   try {
-    const buffer = await api(params);
+    const buffer = await api(...(params || []));
     const blob = new Blob([buffer]);
 
     // edge

@@ -1,21 +1,21 @@
 import type { CodeEnum } from "@/enums/http";
 
 export interface Result<T = any> {
+  msg: string;
   code: CodeEnum;
-  message: string;
   data: T | null;
 }
 
 export interface PParams<T> {
-  current: number;
   size: number;
-  orderField: Exclude<keyof T, "id">;
+  current: number;
   order: "asc" | "desc";
+  orderField: Exclude<keyof T, "id">;
 }
 
 export interface PRes<T> {
-  current: number;
+  list: T[];
   size: number;
   total: number;
-  list: T[];
+  current: number;
 }

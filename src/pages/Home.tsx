@@ -50,7 +50,7 @@ function Home() {
       <div>
         <button type="button" onClick={handleSwitchLayout}>click it</button>
         <button type="button" onClick={logoutApi}>logout</button>
-        <button type="button" onClick={() => download(logoutApi, "test")}>download</button>
+        <button type="button" onClick={() => download(loginApi, "test", [{ username: "admin", password: "dot001" }])}>download</button>
       </div>
     </div>
   );

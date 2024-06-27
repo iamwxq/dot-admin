@@ -42,7 +42,7 @@ class HttpRequest {
      */
     this.instance.interceptors.response.use(
       (response: AxiosResponse) => {
-        const { data, code, message: msg } = response.data as Result;
+        const { data, code, msg } = response.data as Result;
 
         if (code && code !== CodeEnum.SUCCESS) {
           message.error(msg);

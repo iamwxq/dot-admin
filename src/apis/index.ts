@@ -78,7 +78,7 @@ class HttpRequest {
     return this.instance.delete(url, { ...options, params });
   }
 
-  public download(url: string, data?: object, options: Omit<AxiosRequestConfig, "data"> = {}): Promise<BlobPart> {
+  public download(url: string, data?: object, options: Omit<AxiosRequestConfig, "data" | "responseType"> = {}): Promise<BlobPart> {
     return this.instance.post(url, data, { ...options, responseType: "blob" });
   }
 }

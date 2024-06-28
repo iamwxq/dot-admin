@@ -31,6 +31,6 @@
     "preserveWatchOutput": true
   },
   "references": [{ "path": "./tsconfig.node.json" }],
-  "include": ["src", "test", "types/**/*.ts", "**.ts", "*.json", "**.*js"],
+  "include": ["src", "tests", "types/**/*.ts", "**.ts", "*.json", "**.*js"],
   "exclude": ["node_modules", "dist"]
 }

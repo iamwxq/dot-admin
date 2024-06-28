@@ -13,7 +13,7 @@
   "license": "MIT",
   "homepage": "https://github.com/iamwxq/dot-admin",
   "scripts": {
-    "cz": "cz",
+    "cz": "git add -A && cz",
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0",

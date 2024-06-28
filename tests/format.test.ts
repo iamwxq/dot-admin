@@ -5,12 +5,12 @@ import { DateFormatEnum } from "#/enums/format";
 
 it("should be YYYY-MM-DD HH:mm:ss", () => {
   const now = new Date();
-  expect(dateFormat(now)).toBe(dayjs(now).format(DateFormatEnum.YYYYMMDD));
+  expect(dateFormat(now)).toBe(dayjs(now).format(DateFormatEnum.YYYYMMDDHHmmss));
 });
 
 it("should be YYYY-MM-DD", () => {
   const now = new Date();
-  expect(dateFormat(now, DateFormatEnum.YYYYMMDDHHmmss)).toBe(dayjs(now).format(DateFormatEnum.YYYYMMDDHHmmss));
+  expect(dateFormat(now, DateFormatEnum.YYYYMMDD)).toBe(dayjs(now).format(DateFormatEnum.YYYYMMDD));
 });
 
 it("should be YY-M-D H:m:s", () => {

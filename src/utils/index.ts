@@ -27,7 +27,7 @@ export function dateFormat(
  *
  * @example useDownload(api, 'user-list', { id }, false, '.pdf');
  */
-export async function download<T extends (...args: any) => Promise<any>>(
+export async function execDownload<T extends (...args: any) => Promise<any>>(
   api: T,
   filename: string,
   params?: Parameters<typeof api>,

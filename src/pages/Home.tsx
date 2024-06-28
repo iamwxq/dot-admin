@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import { Camera } from "lucide-react";
-
 import styles from "@/styles/pages/Home.module.scss";
-
-import { dateFormat, download } from "@/utils";
+import { dateFormat, execDownload } from "@/utils";
 import { useGlobalStore } from "@/stores/global";
 import { SecsEnum } from "#/enums/time";
 import { DateFormatEnum } from "#/enums/format";
@@ -49,7 +47,7 @@ function Home() {
       <div>
         <button type="button" onClick={handleSwitchLayout}>click it</button>
         <button type="button" onClick={logoutApi}>logout</button>
-        <button type="button" onClick={() => download(loginApi, "test", [{ username: "admin", password: "dot001" }])}>download</button>
+        <button type="button" onClick={() => execDownload(loginApi, "test", [{ username: "admin", password: "dot001" }])}>download</button>
       </div>
     </div>
   );

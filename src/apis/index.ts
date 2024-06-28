@@ -10,7 +10,7 @@ import type {
 import { message } from "antd";
 import { checkStatus } from "./helper";
 import type { Result } from "#/api";
-import { CodeEnum, HttpEnum } from "@/enums/http";
+import { CodeEnum, HttpEnum } from "#/enums/http";
 
 const basicConfig: CreateAxiosDefaults = {
   withCredentials: true,

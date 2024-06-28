@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import { notification } from "antd";
-import { DateFormatEnum } from "@/enums/format";
+import { DateFormatEnum } from "#/enums/format";
 
 /**
  * 用于格式化后端提供的时间

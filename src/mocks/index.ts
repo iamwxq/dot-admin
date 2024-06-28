@@ -1,7 +1,7 @@
 import type { HttpHandler } from "msw";
 import { http } from "msw";
 import type { Result } from "#/api";
-import { CodeEnum } from "@/enums/http";
+import { CodeEnum } from "#/enums/http";
 
 /**
  * 通用响应体结果

@@ -1,8 +1,7 @@
-import { expect, it } from "vitest";
 import dayjs from "dayjs";
-
+import { expect, it } from "vitest";
 import { dateFormat } from "@/utils";
-import { DateFormatEnum } from "@/enums/format";
+import { DateFormatEnum } from "#/enums/format";
 
 it("should be YYYY-MM-DD HH:mm:ss", () => {
   const now = new Date();

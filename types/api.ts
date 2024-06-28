@@ -1,4 +1,4 @@
-import type { CodeEnum } from "@/enums/http";
+import type { CodeEnum } from "#/enums/http";
 
 export interface Result<T = any> {
   msg: string;

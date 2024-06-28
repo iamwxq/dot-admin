@@ -4,9 +4,9 @@ import { Camera } from "lucide-react";
 import styles from "@/styles/pages/Home.module.scss";
 
 import { dateFormat, download } from "@/utils";
-import { SecsEnum } from "@/enums/time";
 import { useGlobalStore } from "@/stores/global";
-import { DateFormatEnum } from "@/enums/format";
+import { SecsEnum } from "#/enums/time";
+import { DateFormatEnum } from "#/enums/format";
 import { loginApi, logoutApi } from "@/apis/features/auth";
 
 function Home() {
@@ -16,8 +16,7 @@ function Home() {
   const switchLayout = useGlobalStore.use.switchLayout();
 
   async function handleSwitchLayout() {
-    const data = await loginApi({ username: "admin", password: "dot001" });
-    console.log(data.token);
+    await loginApi({ username: "admin", password: "dot001" });
 
     if (layout === "horizontal")
       switchLayout("vertical");

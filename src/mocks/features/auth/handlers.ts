@@ -1,6 +1,6 @@
 import { HttpResponse } from "msw";
 import type { HttpHandler } from "msw";
-import { CodeEnum } from "@/enums/http";
+import { CodeEnum } from "#/enums/http";
 import { fail, httpPost, success } from "@/mocks";
 import { AuthUrl } from "@/apis/features/auth/url";
 import { loginData } from "@/mocks/features/auth/data";

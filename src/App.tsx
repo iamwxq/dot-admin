@@ -1,8 +1,19 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Home from "@/pages/Home";
+
+const queryClient = new QueryClient();
 
 function App() {
   return (
-    <Home />
+    <QueryClientProvider client={queryClient}>
+      <Home />
+
+      <ReactQueryDevtools
+        buttonPosition="bottom-left"
+        initialIsOpen={false}
+      />
+    </QueryClientProvider>
   );
 }
 

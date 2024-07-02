@@ -46,7 +46,7 @@ class HttpRequest {
 
         if (code && code !== CodeEnum.SUCCESS) {
           message.error(msg);
-          return Promise.reject(msg);
+          return Promise.reject(response.data);
         }
 
         return data;

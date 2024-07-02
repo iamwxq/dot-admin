@@ -1,17 +1,43 @@
 import { useEffect, useState } from "react";
 import { Camera } from "lucide-react";
+import { queryOptions, useQueries, useQuery } from "@tanstack/react-query";
 import styles from "@/styles/pages/Home.module.scss";
 import { dateFormat, execDownload } from "@/utils";
 import { useGlobalStore } from "@/stores/global";
 import { SecsEnum } from "#/enums/time";
 import { DateFormatEnum } from "#/enums/format";
 import { loginApi, logoutApi } from "@/apis/features/auth";
+import type { LoginParams } from "@/apis/features/auth/interface";
 
 function Home() {
   const [now, setNow] = useState(() => Date.now());
 
   const layout = useGlobalStore.use.layout();
   const switchLayout = useGlobalStore.use.switchLayout();
+
+  const username: string = "admin";
+  const password: string = "dot001";
+
+  useQuery(handleLogin({ username, password }));
+  useQueries({
+    queries: [
+      handleLogin({ username, password: "dot002" }),
+      handleLogin({ username: "admin2", password }),
+    ],
+  });
+
+  function handleLogin(params: LoginParams) {
+    return queryOptions({
+      queryKey: ["login", params],
+      queryFn: ({ queryKey }) => {
+        const [_, params] = queryKey;
+        if (typeof params !== "string")
+          return loginApi(params);
+      },
+      staleTime: SecsEnum.S10,
+      retry: false,
+    });
+  }
 
   async function handleSwitchLayout() {
     await loginApi({ username: "admin", password: "dot001" });

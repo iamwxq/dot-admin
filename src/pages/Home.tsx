@@ -8,6 +8,7 @@ import { SecsEnum } from "#/enums/time";
 import { DateFormatEnum } from "#/enums/format";
 import { loginApi, logoutApi } from "@/apis/features/auth";
 import type { LoginParams } from "@/apis/features/auth/interface";
+import IconButton from "@/components/icons/icon-button";
 
 function Home() {
   const [now, setNow] = useState(() => Date.now());
@@ -62,6 +63,8 @@ function Home() {
       <ul>
         <li>hi</li>
         <li>wow</li>
+        <li>你好</li>
+        <li>苹方</li>
       </ul>
 
       <div>
@@ -73,7 +76,15 @@ function Home() {
       <div>
         <button type="button" onClick={handleSwitchLayout}>click it</button>
         <button type="button" onClick={logoutApi}>logout</button>
-        <button type="button" onClick={() => execDownload(loginApi, "test", [{ username: "admin", password: "dot001" }])}>download</button>
+        <button
+          type="button"
+          onClick={() => execDownload(loginApi, "test", [{ username: "admin", password: "dot001" }])}
+        >
+          download
+        </button>
+        <IconButton icon={<Camera className={styles.camera} color="#fff" />} type="primary">
+          vertical
+        </IconButton>
       </div>
     </div>
   );

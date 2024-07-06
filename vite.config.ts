@@ -2,6 +2,7 @@
 
 import path from "node:path";
 import process from "node:process";
+import { Agent } from "node:http";
 import react from "@vitejs/plugin-react-swc";
 import { defineConfig, loadEnv } from "vite";
 import { createHtmlPlugin } from "vite-plugin-html";
@@ -28,6 +29,7 @@ interface ViteEnv {
 
 // load global .scss files
 const additionalData: string = [
+  `@use "@/styles/_fonts.scss" as *;`,
   `@use "@/styles/_variables.scss" as *;`,
   `@use "@/styles/_mixins.scss" as *;`,
   `@use "@/styles/_global.scss" as *;`,
@@ -58,6 +60,7 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
       },
     },
     css: {
+      devSourcemap: true,
       preprocessorOptions: {
         scss: { additionalData },
       },
@@ -65,12 +68,14 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
     server: {
       cors: true,
       host: "0.0.0.0",
+      strictPort: true,
       port: env.VITE_PORT,
       open: env.VITE_OPEN,
       proxy: createProxy(env.VITE_PROXY),
     },
     build: {
       outDir: "dist",
+      target: "esnext",
       minify: env.VITE_DROP_CONSOLE ? "terser" : "esbuild",
       terserOptions: env.VITE_DROP_CONSOLE
         ? {
@@ -159,6 +164,7 @@ function createProxy(env: ViteEnv["VITE_PROXY"] = []) {
       ws: true,
       changeOrigin: true,
       rewrite: path => path.replace(new RegExp(`^${prefix}`), ""),
+      agent: new Agent({ keepAlive: true, keepAliveInitialDelay: 20_000 }),
       ...(/^https:\/\//.test(target) ? { secure: false } : {}),
     };
   }

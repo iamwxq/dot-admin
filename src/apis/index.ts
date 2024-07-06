@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosHeaders } from "axios";
 import type {
   AxiosError,
   AxiosInstance,
@@ -10,9 +10,12 @@ import type {
 import { message } from "antd";
 import { checkStatus } from "./helper";
 import type { Result } from "#/api";
-import { CodeEnum, HttpEnum } from "#/enums/http";
+import { CodeEnum, ContentTypeEnum, HttpEnum } from "#/enums/http";
+
+const headers = new AxiosHeaders().setContentType(ContentTypeEnum.JSON);
 
 const basicConfig: CreateAxiosDefaults = {
+  headers,
   withCredentials: true,
   responseEncoding: "utf8",
   timeout: HttpEnum.TIMEOUT as number,

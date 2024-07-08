@@ -3,8 +3,10 @@ import { http } from "msw";
 import type { Result } from "#/api";
 import { CodeEnum } from "#/enums/http";
 
+const { VITE_API_URL: API_URL } = import.meta.env;
+
 export class HttpMock {
-  private static prefix: string = import.meta.env.VITE_API_URL;
+  private static prefix: string = `/fake${API_URL}`;
 
   /**
    * 通用响应体结果

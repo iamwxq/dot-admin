@@ -12,13 +12,16 @@ import { checkStatus } from "./helper";
 import type { Result } from "#/api";
 import { CodeEnum, ContentTypeEnum, HttpEnum } from "#/enums/http";
 
+const { VITE_API_URL: API_URL, VITE_APP_MOCK: MOCK } = import.meta.env;
+
 const headers = new AxiosHeaders().setContentType(ContentTypeEnum.JSON);
+const baseURL = MOCK === "true" ? `/fake${API_URL}` : API_URL;
 
 const basicConfig: CreateAxiosDefaults = {
+  baseURL,
   headers,
   withCredentials: true,
   timeout: <number>HttpEnum.TIMEOUT,
-  baseURL: import.meta.env.VITE_API_URL,
 };
 
 class HttpRequest {

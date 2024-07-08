@@ -1,63 +1,6 @@
 import { faker } from "@faker-js/faker/locale/zh_CN";
 
-faker.seed(Date.now());
+const zh_CN_Faker = faker;
+zh_CN_Faker.seed(Date.now());
 
-const {
-  airline,
-  animal,
-  color,
-  commerce,
-  company,
-  database,
-  datatype,
-  date,
-  definitions,
-  finance,
-  git,
-  hacker,
-  helpers,
-  image,
-  internet,
-  location,
-  lorem,
-  music,
-  number,
-  person,
-  phone,
-  rawDefinitions,
-  science,
-  string,
-  system,
-  vehicle,
-  word,
-} = faker;
-
-export {
-  airline,
-  animal,
-  color,
-  commerce,
-  company,
-  database,
-  datatype,
-  date,
-  definitions,
-  finance,
-  git,
-  hacker,
-  helpers,
-  image,
-  internet,
-  location,
-  lorem,
-  music,
-  number,
-  person,
-  phone,
-  rawDefinitions,
-  science,
-  string,
-  system,
-  vehicle,
-  word,
-};
+export default zh_CN_Faker;

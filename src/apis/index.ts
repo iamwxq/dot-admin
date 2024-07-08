@@ -17,8 +17,7 @@ const headers = new AxiosHeaders().setContentType(ContentTypeEnum.JSON);
 const basicConfig: CreateAxiosDefaults = {
   headers,
   withCredentials: true,
-  responseEncoding: "utf8",
-  timeout: HttpEnum.TIMEOUT as number,
+  timeout: <number>HttpEnum.TIMEOUT,
   baseURL: import.meta.env.VITE_API_URL,
 };
 

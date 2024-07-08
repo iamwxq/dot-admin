@@ -7,5 +7,5 @@ export function loginApi(data: LoginParams) {
 }
 
 export function logoutApi() {
-  return http.post(AuthUrl.Logout);
+  return http.post<null>(AuthUrl.Logout);
 }

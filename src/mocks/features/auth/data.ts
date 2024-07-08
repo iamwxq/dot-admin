@@ -1,14 +1,22 @@
 import { internet, string } from "@/mocks/faker";
 import type { LoginRes } from "@/apis/features/auth/interface";
 
-export function loginData(): LoginRes {
-  const payload = {
+export function loginRes(): LoginRes {
+  const accessToken = btoa(JSON.stringify({
     id: string.uuid(),
-    signature: "dot-admin",
+    signature: "access",
     email: internet.email(),
     username: internet.userName(),
     exp: Math.floor(Date.now() / 1000) + (60 * 60),
-  };
+  }));
 
-  return { token: btoa(JSON.stringify(payload)) };
+  const refreshToken = btoa(JSON.stringify({
+    id: string.uuid(),
+    signature: "refresh",
+    email: internet.email(),
+    username: internet.userName(),
+    exp: Math.floor(Date.now() / 1000) + (60 * 60),
+  }));
+
+  return { accessToken, refreshToken };
 }

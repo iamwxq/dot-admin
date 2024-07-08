@@ -3,7 +3,7 @@ import type { HttpHandler } from "msw";
 import { HttpMock } from "@/mocks";
 import { CodeEnum } from "#/enums/http";
 import { AuthUrl } from "@/apis/features/auth/url";
-import { loginData } from "@/mocks/features/auth/data";
+import { loginRes } from "@/mocks/features/auth/data";
 import type { LoginParams } from "@/apis/features/auth/interface";
 
 /**
@@ -13,7 +13,7 @@ const login: HttpHandler = HttpMock.post(AuthUrl.Login, async ({ request }) => {
   const payload = await request.json() as LoginParams;
 
   if (payload.username === "admin" && payload.password === "dot001")
-    return HttpResponse.json(HttpMock.success(loginData(), "登陆成功"));
+    return HttpResponse.json(HttpMock.success(loginRes(), "登陆成功"));
 
   if (payload.username !== "admin")
     return HttpResponse.json(HttpMock.fail("账号不存在", CodeEnum.OVERDUE));

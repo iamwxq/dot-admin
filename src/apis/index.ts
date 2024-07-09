@@ -88,4 +88,4 @@ class HttpRequest {
   }
 }
 
-export default new HttpRequest(basicConfig);
+export const http = new HttpRequest(basicConfig);

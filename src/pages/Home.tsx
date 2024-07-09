@@ -1,8 +1,10 @@
+import type { ChangeEvent } from "react";
 import { useEffect, useState } from "react";
 import { Camera } from "lucide-react";
-import { queryOptions, useQueries, useQuery } from "@tanstack/react-query";
+import { queryOptions, useQuery } from "@tanstack/react-query";
 import styles from "@/styles/pages/Home.module.scss";
-import { dateFormat, execDownload } from "@/utils";
+import { cutFile, dateFormat, hashPassword } from "@/utils";
+import { execDownload } from "@/apis/utils";
 import { useGlobalStore } from "@/stores/global";
 import { SecsEnum } from "#/enums/time";
 import { DateFormatEnum } from "#/enums/format";
@@ -17,15 +19,9 @@ function Home() {
   const switchLayout = useGlobalStore.use.switchLayout();
 
   const username: string = "admin";
-  const password: string = "dot001";
+  const password: string = hashPassword("dot001");
 
   useQuery(handleLogin({ username, password }));
-  useQueries({
-    queries: [
-      handleLogin({ username, password: "dot002" }),
-      handleLogin({ username: "admin2", password }),
-    ],
-  });
 
   function handleLogin(params: LoginParams) {
     return queryOptions({
@@ -46,6 +42,16 @@ function Home() {
     if (layout === "horizontal")
       switchLayout("vertical");
     else switchLayout("horizontal");
+  }
+
+  async function handleUpload(e: ChangeEvent<HTMLInputElement>) {
+    const files = e.target.files;
+    const file = files?.item(0);
+
+    if (!files || !file)
+      return;
+
+    await cutFile(file);
   }
 
   useEffect(() => {
@@ -85,6 +91,8 @@ function Home() {
         <IconButton icon={<Camera className={styles.camera} color="#fff" />} type="primary">
           vertical
         </IconButton>
+
+        <input type="file" onChange={handleUpload} />
       </div>
     </div>
   );

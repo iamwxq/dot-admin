@@ -1,6 +1,9 @@
 import dayjs from "dayjs";
-import { notification } from "antd";
+import SparkMD5 from "spark-md5";
+import FileCutWorker from "@/utils/workers/cut-file-worker?worker";
+import { ByteEnum } from "#/enums/byte";
 import { DateFormatEnum } from "#/enums/format";
+import type { FileChunk } from "#/utils";
 
 /**
  * 用于格式化后端提供的时间
@@ -17,51 +20,86 @@ export function dateFormat(
 }
 
 /**
- * 调用下载 API
+ * 切分大文件
  *
- * @param api 接口
- * @param filename 下载文件名
- * @param params 接口参数
- * @param notify 是否要弹出下载提示气泡
- * @param fileType 文件类型
- *
- * @example useDownload(api, 'user-list', { id }, false, '.pdf');
+ * @param file 需要进行分片的文件
+ * @param index 当前是第几个分片, 下标从0开始
+ * @param chunkSize 分片大小
  */
-export async function execDownload<T extends (...args: any) => Promise<any>>(
-  api: T,
-  filename: string,
-  params?: Parameters<typeof api>,
-  notify: boolean = true,
-  fileType: string = ".xlsx",
-) {
-  if (notify) {
-    notification.info({
-      message: "温馨提示",
-      description: "如果数据庞大会导致下载缓慢哦，请您耐心等待！",
-      placement: "topRight",
-    });
-  }
+export function createChunks(file: File, index: number, chunkSize: number): Promise<FileChunk> {
+  return new Promise((resolve) => {
+    const start = index * chunkSize;
+    const end = start + chunkSize;
+    const blob = file.slice(start, end);
+    const spark = new SparkMD5.ArrayBuffer();
+    const reader = new FileReader();
 
-  try {
-    const buffer = await api(...(params || []));
-    const blob = new Blob([buffer]);
+    reader.onload = (e) => {
+      spark.append(<ArrayBuffer>(<FileReader>e.target).result);
 
-    // edge
-    const nav = window.navigator as any;
-    if ("msSaveOrOpenBlob" in nav)
-      return nav.msSaveOrOpenBlob(blob, `${filename}${fileType}`);
+      resolve({
+        index,
+        start,
+        end,
+        hash: spark.end(),
+        blob,
+      });
+    };
 
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.style.display = "none";
-    link.download = `${filename}${fileType}`;
-    link.href = url;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(url);
-  }
-  catch (error) {
-    console.error(error);
-  }
+    reader.readAsArrayBuffer(blob);
+  });
+}
+
+/**
+ * 文件分片执行函数
+ * @param file 需切片文件
+ * @param {ByteEnum | number} chunkSize 分片大小; 推荐使用 `ByteEnum` 的整数倍为单位进行切片
+ */
+export async function cutFile(
+  file: File,
+  chunkSize: number = ByteEnum.MB,
+  workers: number = navigator.hardwareConcurrency ?? 4,
+): Promise<FileChunk[]> {
+  return new Promise((resolve) => {
+    const chunkCount = Math.ceil(file.size / chunkSize); // 分片数
+    const threadChunkCount = Math.ceil(chunkCount / workers); // 每个线程分到多少个分片
+    const result: FileChunk[] = [];
+    let finishCount: number = 0;
+
+    for (let i = 0; i < workers; i++) {
+      // 创建一个线程，并分配任务
+      const worker = new FileCutWorker();
+
+      const start = i * threadChunkCount;
+      let end = (i + 1) * threadChunkCount;
+      if (end > chunkCount)
+        end = chunkCount;
+
+      worker.postMessage({
+        file,
+        chunkSize,
+        startChunkIndex: start,
+        endChunkIndex: end,
+      });
+
+      worker.onmessage = (e: MessageEvent<FileChunk[]>) => {
+        for (let i = start; i < end; i++) result[i] = e.data[i - start];
+
+        worker.terminate();
+        finishCount++;
+
+        if (finishCount === workers)
+          resolve(result);
+      };
+    }
+  });
+}
+
+/**
+ * md5加密密码
+ *
+ * @param pwd 密码字符
+ */
+export function hashPassword(pwd: string) {
+  return SparkMD5.hash(pwd);
 }

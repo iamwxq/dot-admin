@@ -6,6 +6,7 @@ import { Agent } from "node:http";
 import react from "@vitejs/plugin-react-swc";
 import { defineConfig, loadEnv } from "vite";
 import { createHtmlPlugin } from "vite-plugin-html";
+import { VitePWA } from "vite-plugin-pwa";
 import type { ConfigEnv, PluginOption, ProxyOptions, UserConfig } from "vite";
 
 interface ViteEnv {
@@ -69,7 +70,7 @@ function createEnvs(env: Record<keyof ViteEnv, string>): ViteEnv {
 }
 
 function createPlugin(env: ViteEnv): Array<PluginOption | PluginOption[]> {
-  const { VITE_GLOB_APP_TITLE } = env;
+  const { VITE_GLOB_APP_TITLE, VITE_PWA } = env;
 
   return [
     react(),
@@ -81,11 +82,41 @@ function createPlugin(env: ViteEnv): Array<PluginOption | PluginOption[]> {
         },
       },
     }),
+    ...(VITE_PWA
+      ? [VitePWA({
+          registerType: "autoUpdate",
+          manifest: {
+            name: VITE_GLOB_APP_TITLE,
+            short_name: VITE_GLOB_APP_TITLE,
+            theme_color: "#ffffff",
+            icons: [
+              {
+                src: "/logo.png",
+                sizes: "192x192",
+                type: "image/png",
+              },
+              {
+                src: "/logo.png",
+                sizes: "512x512",
+                type: "image/png",
+              },
+              {
+                src: "/logo.png",
+                sizes: "512x512",
+                type: "image/png",
+                purpose: "any maskable",
+              },
+            ],
+          },
+        })]
+      : []),
   ];
 }
 
 function createProxies() {
   const proxies: Record<string, ProxyOptions> = {};
+
+  /** @description 此处配置需要代理的url */
   const urls: Array<[string, string]> = [
     ["/api", "http://localhost:5250"],
   ];

@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import SparkMD5 from "spark-md5";
-import FileCutWorker from "@/utils/workers/cut-file-worker?worker";
+import FileCutWorker from "@/workers/cut-file-worker?worker";
 import { ByteEnum } from "#/enums/byte";
 import { DateFormatEnum } from "#/enums/format";
 import type { FileChunk } from "#/utils";

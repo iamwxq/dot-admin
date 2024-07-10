@@ -9,8 +9,8 @@ export interface Result<T = any> {
 export interface PParams<T> {
   size: number;
   current: number;
-  order: "asc" | "desc";
-  orderField: Exclude<keyof T, "id">;
+  order?: "asc" | "desc";
+  orderField?: Exclude<keyof T, "id">;
 }
 
 export interface PRes<T> {

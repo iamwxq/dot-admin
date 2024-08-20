@@ -58,7 +58,7 @@ function Login() {
 
   return (
     <div className={styles.container}>
-      <ProTable<UserInfo>
+      <ProTable
         columns={columns}
         dataSource={data?.list}
         pagination={{ total: data?.total }}

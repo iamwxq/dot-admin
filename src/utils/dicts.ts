@@ -7,6 +7,5 @@ export const dicts = {
     [GenderEnum.Unknown]: "未知",
   },
 
-  "user-role": {
-  },
+  "user-role": {},
 };

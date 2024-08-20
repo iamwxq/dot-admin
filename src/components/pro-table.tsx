@@ -9,22 +9,20 @@ interface ProTableProps<T extends RecordType> extends TableProps<T> {
   columns: ProColumnsProps<T>;
 }
 
-const PaginationDefaultProps: TableProps["pagination"] = {
-  position: ["bottomRight"],
+const DefaultRowKey = "username";
+const DefaultPaginationProps: TableProps["pagination"] = {
+  position: ["bottomCenter"],
 };
 
 function ProTable<T extends RecordType = object>({
   className: clsn,
   columns: cols,
   dataSource,
-  pagination: pg,
+  pagination: pgn,
   rowKey: rk,
 
   ...props
 }: ProTableProps<T>) {
-  const pagination = pg
-    ? ({ ...PaginationDefaultProps, ...pg }) as TableProps<T>["pagination"]
-    : PaginationDefaultProps as TableProps<T>["pagination"];
   const className = `${clsn ?? ""} ${styles.table}`.trim();
   const queries = cols?.filter(col => col.search) ?? [];
   const columns = cols.map((col) => {
@@ -33,8 +31,9 @@ function ProTable<T extends RecordType = object>({
     }
     return col;
   });
+  const pagination: TableProps<T>["pagination"] = ({ ...DefaultPaginationProps, ...(pgn ?? {}) });
   const rowKey: TableProps<T>["rowKey"] = rk || (dataSource && dataSource.length
-    ? Object.hasOwn(dataSource[0], "id") ? "id" : undefined
+    ? Object.hasOwn(dataSource[0], DefaultRowKey) ? DefaultRowKey : undefined
     : undefined);
 
   return (
@@ -45,6 +44,7 @@ function ProTable<T extends RecordType = object>({
         <Table<T>
           className={className}
           columns={columns}
+          dataSource={dataSource}
           pagination={pagination}
           rowKey={rowKey}
           {...props}

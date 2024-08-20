@@ -50,7 +50,8 @@ export interface DataKey {
 
 export interface ColumnEnum {
   label: string;
-  value: string;
+  value: string | number | symbol;
+  disabled?: boolean;
 }
 
 interface CustomColumnType {

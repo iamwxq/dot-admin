@@ -1,4 +1,5 @@
 import type { CodeEnum } from "#/enums/http";
+import type { DataKey } from "#/components/pro-table";
 
 export interface Result<T = any> {
   msg: string;
@@ -6,7 +7,7 @@ export interface Result<T = any> {
   data: T | null;
 }
 
-export interface PParams<T> {
+export interface PParam<T> {
   size: number;
   current: number;
   order?: "asc" | "desc";
@@ -14,8 +15,8 @@ export interface PParams<T> {
 }
 
 export interface PRes<T> {
-  list: T[];
   size: number;
   total: number;
   current: number;
+  list: Array<T & DataKey>;
 }

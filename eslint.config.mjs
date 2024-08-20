@@ -14,6 +14,8 @@ export default antfu(
   // react
   {
     rules: {
+      "unused-imports/no-unused-imports": "off",
+      "unused-imports/no-unused-vars": "off",
       "react/prop-types": "off",
       "react-refresh/only-export-components": "off",
       "style/jsx-one-expression-per-line": "off",

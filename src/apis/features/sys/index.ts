@@ -1,11 +1,21 @@
-import type { LoginParams, LoginRes } from "./interface";
-import { AuthUrl } from "./url";
 import { http } from "@/apis";
+import type { UserInfo, UserToken } from "#/entities/user";
 
-export function loginApi(data: LoginParams) {
-  return http.post<LoginRes>(AuthUrl.Login, data);
+export enum AuthUrl {
+  SIGNIN = "/auth/signin",
+  LOGOUT = "/auth/logout",
+};
+
+export type SignInRes = UserToken & { user: UserInfo };
+export interface SignInParams {
+  username: string;
+  password: string;
 }
 
-export function logoutApi() {
-  return http.post<null>(AuthUrl.Logout);
+export function signin(data: SignInParams) {
+  return http.post<SignInRes>({ url: AuthUrl.SIGNIN, data });
+}
+
+export function logout() {
+  return http.post<null>({ url: AuthUrl.LOGOUT });
 }

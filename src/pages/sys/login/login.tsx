@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import styles from "@/styles/pages/login.module.scss";
+import styles from "@/pages/sys/login/styles/login.module.scss";
 import ProTable from "@/components/pro-table";
 import type { ProColumnsProps } from "#/components/pro-table";
 import { userPageApi } from "@/apis/features/user";
-import type { UserInfo } from "#/entity/user";
+import type { UserInfo } from "#/entities/user";
 import { ProTableUtil } from "@/utils/cls";
 
 function Login() {
@@ -58,7 +58,7 @@ function Login() {
 
   return (
     <div className={styles.container}>
-      <ProTable
+      <ProTable<UserInfo>
         columns={columns}
         dataSource={data?.list}
         pagination={{ total: data?.total }}

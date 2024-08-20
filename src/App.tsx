@@ -1,19 +1,14 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import Login from "@/pages/login";
-
-const queryClient = new QueryClient();
+import { App as AntdApp } from "antd";
+import AntdConfigProvider from "@/components/antd";
+import Router from "@/routers";
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <Login />
-
-      <ReactQueryDevtools
-        buttonPosition="bottom-left"
-        initialIsOpen={false}
-      />
-    </QueryClientProvider>
+    <AntdConfigProvider>
+      <AntdApp>
+        <Router />
+      </AntdApp>
+    </AntdConfigProvider>
   );
 }
 

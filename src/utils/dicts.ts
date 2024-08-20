@@ -1,11 +1,15 @@
 import { GenderEnum } from "#/enums/entity";
+import { UsableStatusEnum } from "#/enums/sys";
 
 export const dicts = {
   "gender": {
-    [GenderEnum.Male]: "男",
-    [GenderEnum.Female]: "女",
-    [GenderEnum.Unknown]: "未知",
+    [GenderEnum.MALE]: "男",
+    [GenderEnum.FEMALE]: "女",
+    [GenderEnum.UNKNOWN]: "未知",
   },
 
-  "user-role": {},
+  "usable-status": {
+    [UsableStatusEnum.ENABLE]: "启用",
+    [UsableStatusEnum.DISABLE]: "禁用",
+  },
 };

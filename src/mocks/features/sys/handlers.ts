@@ -1,19 +1,20 @@
 import { HttpResponse } from "msw";
 import type { HttpHandler } from "msw";
+
+import { signInRes } from "./data";
 import { HttpMock } from "@/mocks";
 import { CodeEnum } from "#/enums/http";
-import { AuthUrl } from "@/apis/features/sys/url";
-import { loginRes } from "@/mocks/features/sys/data";
-import type { LoginParams } from "@/apis/features/sys/interface";
+import { AuthUrl } from "@/apis/features/sys";
+import type { SignInParams } from "@/apis/features/sys";
 
 /**
  * @description 登录
  */
-const login: HttpHandler = HttpMock.post(AuthUrl.Login, async ({ request }) => {
-  const payload = await request.json() as LoginParams;
+const signin: HttpHandler = HttpMock.post(AuthUrl.SIGNIN, async ({ request }) => {
+  const payload = await request.json() as SignInParams;
 
   if (payload.username === "admin" && payload.password === "288c33d314ab3c6a73b7768a6df2ddfd")
-    return HttpResponse.json(HttpMock.success(loginRes()));
+    return HttpResponse.json(HttpMock.success(signInRes()));
 
   if (payload.username !== "admin")
     return HttpResponse.json(HttpMock.fail("账号不存在", CodeEnum.OVERDUE));
@@ -25,12 +26,12 @@ const login: HttpHandler = HttpMock.post(AuthUrl.Login, async ({ request }) => {
 /**
  * @description 登出
  */
-const logout: HttpHandler = HttpMock.post(AuthUrl.Logout, () => {
+const logout: HttpHandler = HttpMock.post(AuthUrl.LOGOUT, () => {
   return HttpResponse.json(HttpMock.success());
 });
 
 const handlers: HttpHandler[] = [
-  login,
+  signin,
   logout,
 ];
 

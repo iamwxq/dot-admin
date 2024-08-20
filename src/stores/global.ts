@@ -1,7 +1,6 @@
 import { create } from "zustand";
-import { createJSONStorage, persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
-import type { UserInfo } from "#/entity/user";
+import type { UserInfo } from "#/entities/user";
 import { GenderEnum } from "#/enums/entity";
 
 interface State {
@@ -24,27 +23,22 @@ const initialState: State = {
     refresh: "",
   },
   user: {
+    id: "",
     age: 0,
     phone: "",
     email: "",
     username: "",
-    gender: GenderEnum.Unknown,
+    gender: GenderEnum.UNKNOWN,
   },
 };
 
 export const useGlobalStore = create<State & Action>()(
-  persist(
-    immer(set => ({
-      ...initialState,
+  immer(set => ({
+    ...initialState,
 
-      setUser: (user: State["user"]) => set(() => ({ user })),
-      setToken: (token: State["token"]) => set(() => ({ token })),
+    setUser: (user: State["user"]) => set(() => ({ user })),
+    setToken: (token: State["token"]) => set(() => ({ token })),
 
-      reset: () => set(() => initialState),
-    })),
-    {
-      name: "cmp-global",
-      storage: createJSONStorage(() => localStorage),
-    },
-  ),
+    reset: () => set(() => initialState),
+  })),
 );

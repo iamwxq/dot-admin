@@ -1,13 +1,13 @@
 export enum ThemeMode {
-  Light = "light",
-  Dark = "dark",
+  LIGHT = "light",
+  DARK = "dark",
 }
 
 export enum ThemeLayout {
-  Vertical = "vertical",
-  Horizontal = "horizontal",
+  VERTICAL = "vertical",
+  HORIZONTAL = "horizontal",
 }
 
 export enum ThemeColorPresets {
-  Default = "default",
+  DEFAULT = "default",
 }

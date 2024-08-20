@@ -8,9 +8,9 @@ import type {
   InternalAxiosRequestConfig,
 } from "axios";
 import { message } from "antd";
-import { checkStatus } from "./helper";
-import type { Result } from "#/api";
+import { checkStatus } from "@/apis/helpers";
 import { CodeEnum, ContentTypeEnum, HttpEnum } from "#/enums/http";
+import type { Result } from "#/api";
 
 const { VITE_API_URL: API_URL, VITE_APP_MOCK: MOCK } = import.meta.env;
 
@@ -67,23 +67,43 @@ class HttpRequest {
     );
   }
 
-  public get<T>(url: string, params?: object, options: Omit<AxiosRequestConfig, "params"> = {}): Promise<T> {
+  public get<T>({ url, params, options = {} }: {
+    url: string;
+    params?: object;
+    options?: Omit<AxiosRequestConfig, "params">;
+  }): Promise<T> {
     return this.instance.get(url, { ...options, params });
   }
 
-  public post<T>(url: string, data?: object, options: Omit<AxiosRequestConfig, "data"> = {}): Promise<T> {
+  public post<T>({ url, data, options = {} }: {
+    url: string;
+    data?: object;
+    options?: Omit<AxiosRequestConfig, "data">;
+  }): Promise<T> {
     return this.instance.post(url, data, options);
   }
 
-  public put<T>(url: string, data?: object, options: Omit<AxiosRequestConfig, "data"> = {}): Promise<T> {
+  public put<T>({ url, data, options }: {
+    url: string;
+    data?: object;
+    options?: Omit<AxiosRequestConfig, "data">;
+  }): Promise<T> {
     return this.instance.put(url, data, options);
   }
 
-  public delete<T>(url: string, params?: object, options: Omit<AxiosRequestConfig, "params"> = {}): Promise<T> {
+  public delete<T>({ url, params, options }: {
+    url: string;
+    params?: object;
+    options?: Omit<AxiosRequestConfig, "params">;
+  }): Promise<T> {
     return this.instance.delete(url, { ...options, params });
   }
 
-  public download(url: string, data?: object, options: Omit<AxiosRequestConfig, "data" | "responseType"> = {}): Promise<BlobPart> {
+  public stream({ url, data, options }: {
+    url: string;
+    data?: object;
+    options?: Omit<AxiosRequestConfig, "data" | "responseType">;
+  }): Promise<BlobPart> {
     return this.instance.post(url, data, { ...options, responseType: "blob" });
   }
 }

@@ -9,7 +9,7 @@ interface ProTableProps<T extends RecordType> extends TableProps<T> {
   columns: ProColumnsProps<T>;
 }
 
-const DefaultRowKey = "username";
+const DefaultRowKey = "id";
 const DefaultPaginationProps: TableProps["pagination"] = {
   position: ["bottomCenter"],
 };

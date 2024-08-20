@@ -2,9 +2,9 @@ import { HttpResponse } from "msw";
 import type { HttpHandler } from "msw";
 import { rowUser } from "./data";
 import { HttpMock } from "@/mocks";
-import { UserUrl } from "@/apis/features/user/url";
-import type { UserPageRes } from "@/apis/features/user/interface";
-import type { UserInfo } from "#/entity/user";
+import { UserUrl } from "@/apis/features/user";
+import type { UserPageRes } from "@/apis/features/user";
+import type { UserInfo } from "#/entities/user";
 
 const userPage: HttpHandler = HttpMock.get(UserUrl.Page, ({ request }) => {
   const url = new URL(request.url);

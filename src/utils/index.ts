@@ -52,6 +52,7 @@ export function createChunks(file: File, index: number, chunkSize: number): Prom
 
 /**
  * 文件分片执行函数
+ *
  * @param file 需切片文件
  * @param {ByteEnum | number} chunkSize 分片大小; 推荐使用 `ByteEnum` 的整数倍为单位进行切片
  */
@@ -98,8 +99,8 @@ export async function cutFile(
 /**
  * md5加密密码
  *
- * @param pwd 密码字符
+ * @param password 密码字符
  */
-export function hashPassword(pwd: string) {
-  return SparkMD5.hash(pwd);
+export function hashPassword(password: string) {
+  return SparkMD5.hash(password);
 }

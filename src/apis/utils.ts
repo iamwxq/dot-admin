@@ -3,7 +3,7 @@ import { notification } from "antd";
 /**
  * 调用下载 API
  *
- * @param api 接口
+ * @param api 接口 - 建议使用 http 类的 download 方法
  * @param filename 下载文件名
  * @param params 接口参数
  * @param notify 是否要弹出下载提示气泡

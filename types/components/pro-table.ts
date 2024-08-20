@@ -56,7 +56,7 @@ export interface ColumnEnum {
 
 interface CustomColumnType {
   search?: boolean | SearchType;
-  enum?: ColumnEnum;
+  enum?: Array<ColumnEnum>;
 }
 
 export type RecordType = Record<string, any>;

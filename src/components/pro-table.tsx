@@ -15,8 +15,10 @@ const PaginationDefaultProps: TableProps["pagination"] = {
 
 function ProTable<T extends RecordType = object>({
   className: clsn,
-  columns,
+  columns: cols,
+  dataSource,
   pagination: pg,
+  rowKey: rk,
 
   ...props
 }: ProTableProps<T>) {
@@ -24,17 +26,27 @@ function ProTable<T extends RecordType = object>({
     ? ({ ...PaginationDefaultProps, ...pg }) as TableProps<T>["pagination"]
     : PaginationDefaultProps as TableProps<T>["pagination"];
   const className = `${clsn ?? ""} ${styles.table}`.trim();
-  const queries = columns?.filter(col => col.search) ?? [];
+  const queries = cols?.filter(col => col.search) ?? [];
+  const columns = cols.map((col) => {
+    if (col.enum && !col.render) {
+      col.render = (value: any) => <>{col.enum!.find(item => item.value === value)?.label ?? (value ?? "-")}</>;
+    }
+    return col;
+  });
+  const rowKey: TableProps<T>["rowKey"] = rk || (dataSource && dataSource.length
+    ? Object.hasOwn(dataSource[0], "id") ? "id" : undefined
+    : undefined);
 
   return (
     <div className={styles.container}>
       <Flex vertical align="center" gap="24px" justify="center">
         {!isEmpty(queries) && <SearchBar items={queries} />}
 
-        <Table
+        <Table<T>
           className={className}
           columns={columns}
           pagination={pagination}
+          rowKey={rowKey}
           {...props}
         />
       </Flex>

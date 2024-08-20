@@ -4,6 +4,7 @@ import ProTable from "@/components/pro-table";
 import type { ProColumnsProps } from "#/components/pro-table";
 import { userPageApi } from "@/apis/features/user";
 import type { UserInfo } from "#/entity/user";
+import { ProTableUtil } from "@/utils/cls";
 
 function Login() {
   const { data } = useQuery({
@@ -39,6 +40,7 @@ function Login() {
     {
       title: "性别",
       dataIndex: "gender",
+      enum: ProTableUtil.getEnum("gender"),
       search: {
         type: "select",
         props: {},

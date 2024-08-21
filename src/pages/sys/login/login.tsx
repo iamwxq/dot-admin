@@ -1,16 +1,15 @@
-import { useQuery } from "@tanstack/react-query";
-import styles from "@/pages/sys/login/styles/login.module.scss";
-import ProTable from "@/components/pro-table";
-import type { ProColumnsProps } from "#/components/pro-table";
-import { userPageApi } from "@/apis/features/user";
-import type { UserInfo } from "#/entities/user";
+import { useRef } from "react";
+
 import { ProTableUtil } from "@/utils/cls";
+import { userPageApi } from "@/apis/features/user";
+import ProTable from "@/components/pro-table";
+import styles from "@/pages/sys/login/login.module.scss";
+import type { UserPageParams } from "@/apis/features/user";
+import type { UserInfo } from "#/entities/user";
+import type { ProColumnsProps, ProTableRef } from "#/components/pro-table";
 
 function Login() {
-  const { data } = useQuery({
-    queryKey: ["users"],
-    queryFn: () => userPageApi({ current: 1, size: 10 }),
-  });
+  const _table = useRef<ProTableRef<UserInfo>>(null);
 
   const columns: ProColumnsProps<UserInfo> = [
     {
@@ -57,11 +56,19 @@ function Login() {
   ];
 
   return (
-    <div className={styles.container}>
-      <ProTable<UserInfo>
+    <div className={styles["login-container"]}>
+      <ProTable
+        ref={_table}
         columns={columns}
-        dataSource={data?.list}
-        pagination={{ total: data?.total }}
+        request={{
+          auto: true,
+          key: "users/page",
+          params: {
+            order: "desc",
+            orderField: "age",
+          } as UserPageParams,
+          api: userPageApi,
+        }}
       />
     </div>
   );

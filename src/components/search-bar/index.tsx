@@ -1,7 +1,7 @@
 import { Flex } from "antd";
 import type { ProColumnType, ProColumnsProps, RecordType } from "#/components/pro-table";
-import SearchBarItem from "@/components/search-bar-item";
-import styles from "@/styles/components/search-bar.module.scss";
+import SearchBarItem from "@/components/search-bar/search-bar-item";
+import styles from "@/components/search-bar/search-bar.module.scss";
 
 interface SearchBarProps<T extends RecordType> {
   items: ProColumnsProps<T>;

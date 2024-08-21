@@ -7,5 +7,5 @@ export interface Role {
   status: UsableStatusEnum;
   order?: number;
   description?: string;
-  permission?: unknown;
+  // permission?: unknown;
 }

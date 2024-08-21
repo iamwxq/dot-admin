@@ -1,3 +1,4 @@
+import type { useQuery } from "@tanstack/react-query";
 import type {
   DatePickerProps,
   InputNumberProps,
@@ -6,6 +7,7 @@ import type {
   TimePickerProps,
 } from "antd";
 import type { ColumnType } from "antd/es/table";
+import type { PRes } from "#/api";
 
 interface SearchTypeBase {
   show?: boolean;
@@ -68,3 +70,8 @@ export interface ProColumnGroupType<T extends RecordType> extends Omit<ProColumn
 type ProColumnsType<T extends RecordType> = (ProColumnType<T> | ProColumnGroupType<T>)[];
 
 export type ProColumnsProps<T extends RecordType> = ProColumnsType<T>;
+
+export interface ProTableRef<T extends RecordType> {
+  data: Array<T> | undefined;
+  refetch: ReturnType<typeof useQuery<PRes<T> | undefined>>["refetch"];
+}

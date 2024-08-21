@@ -12,7 +12,7 @@ export function useClipBoard(): {
 
   const [text, setCopiedTxt] = useState<CopiedValue>(null);
 
-  const copy = async (txt: string) => {
+  const copy = async (txt: string): Promise<boolean> => {
     if (!("clipboard" in navigator)) {
       console.warn("当前浏览器不支持 clipboard API");
       return false;

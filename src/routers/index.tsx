@@ -5,7 +5,7 @@ import type { AppRouteObject } from "#/router";
 
 const LoginRoute: AppRouteObject = {
   path: "/login",
-  Component: lazy(() => import("@/pages/sys/login/login")),
+  Component: lazy(() => import("@/pages/sys/login")),
 };
 
 const NotFound: AppRouteObject = {

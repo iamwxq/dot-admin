@@ -60,6 +60,10 @@ function Login() {
       <ProTable
         ref={_table}
         columns={columns}
+        expandable={{
+          expandedRowRender: (record: UserInfo) => <>{record.id}</>,
+          rowExpandable: (record: UserInfo) => record.gender === 0,
+        }}
         request={{
           auto: true,
           key: "users/page",

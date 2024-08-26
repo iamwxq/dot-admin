@@ -35,10 +35,10 @@ function UnforwardProTable<T extends RecordType = object>({
   className: clsn,
   columns: cols,
   dataSource: ds,
-  interact = true,
   pagination: pgn,
   rowKey: rk,
 
+  interact = true,
   request,
 
   ...props
@@ -59,7 +59,7 @@ function UnforwardProTable<T extends RecordType = object>({
     };
   });
 
-  const { data, refetch } = useQuery({
+  const { data, refetch, isLoading } = useQuery({
     queryKey: [request?.key],
     queryFn: () => request?.api({ current, size, ...request.params }),
     enabled: false,
@@ -110,6 +110,7 @@ function UnforwardProTable<T extends RecordType = object>({
           className={className}
           columns={columns}
           dataSource={dataSource}
+          loading={isLoading}
           pagination={pagination}
           rowKey={rowKey}
           {...props}

@@ -2,7 +2,8 @@ import { dicts } from "@/utils/dicts";
 import type { ColumnEnum } from "#/components/pro-table";
 
 type Dict = keyof typeof dicts;
-type Options<T extends Dict> = { [K in keyof typeof dicts[T]]?: Omit<ColumnEnum, "label" | "value"> };
+type ValueOfDict<T extends Dict> = keyof typeof dicts[T];
+type Options<T extends Dict> = { [K in ValueOfDict<T>]?: Omit<ColumnEnum, "label" | "value"> };
 
 export class ProTableUtil {
   private constructor() {}
@@ -12,7 +13,7 @@ export class ProTableUtil {
     const dict = dicts[name];
 
     for (const [k, label] of Object.entries(dict)) {
-      const value = <keyof typeof dicts[T]>(Number.isNaN(Number(k)) ? k : Number(k));
+      const value = <Exclude<keyof typeof dicts[T], symbol>>(Number.isNaN(Number(k)) ? k : Number(k));
       e.push({ value, label, ...options?.[value] });
     }
 

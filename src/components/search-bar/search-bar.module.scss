@@ -14,7 +14,13 @@
   display: flex;
 
   .label {
+    display: flex;
+    align-items: center;
     flex-shrink: 0;
     user-select: none;
+  }
+
+  .label::after {
+    content: ":"
   }
 }

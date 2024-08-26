@@ -11,24 +11,37 @@ function SearchBar<T extends RecordType>({
   items,
 }: SearchBarProps<T>) {
   const cols = items.map((col: ProColumnType<T>) => ({ ...col, search: col.search! }));
+  const params = items.map((col: ProColumnType<T>) => col.search);
 
   return (
     <div className={styles.container}>
       <Flex align="center" className={styles.ul} gap="20px">
-        {cols.map(col => (
-          <Flex
-            key={col.dataIndex?.toString()}
-            align="center"
-            className={styles.li}
-            gap="8px"
-          >
-            <div className={styles.label}>
-              {typeof col.title === "function" ? col.title({}) : col.title}:
-            </div>
+        {cols.map((col) => {
+          const label = typeof col.title !== "function"
+            ? col.title
+            : <col.title />;
 
-            {typeof col.search === "boolean" ? <SearchBarItem el="input" /> : <SearchBarItem el={col.search.type} props={col.search.props} />}
-          </Flex>
-        ))}
+          const item = typeof col.search === "boolean"
+            ? <SearchBarItem el="input" />
+            : <SearchBarItem el={col.search.type} em={col.enum} props={col.search.props} />;
+
+          return (
+            <Flex
+              key={col.dataIndex?.toString()}
+              align="center"
+              className={styles.li}
+              gap="8px"
+            >
+              <div className={styles.label}>
+                {label}
+              </div>
+
+              <div className={styles["search-item"]}>
+                {item}
+              </div>
+            </Flex>
+          );
+        })}
       </Flex>
     </div>
   );

@@ -12,10 +12,11 @@ import type {
   SelectProps,
   TimePickerProps,
 } from "antd";
-import type { SearchType } from "#/components/pro-table";
+import type { ColumnEnum, SearchType } from "#/components/pro-table";
 
 interface SearchBarItemProps {
   el: SearchType["type"];
+  em?: Array<ColumnEnum>;
   props?: SearchType["props"];
 }
 
@@ -43,12 +44,12 @@ const TimePickerDefaultProps: TimePickerProps = {
   allowClear: true,
 };
 
-function SearchBarItem({ el, props }: SearchBarItemProps) {
+function SearchBarItem({ el, em, props }: SearchBarItemProps) {
   if (el === "input-number")
     return <InputNumber {...({ ...InputNumberDefaultProps, ...props } as InputNumberProps)} />;
 
   if (el === "select")
-    return <Select {...({ ...SelectDefaultProps, ...props } as SelectProps)} />;
+    return <Select options={em} {...({ ...SelectDefaultProps, ...props } as SelectProps)} />;
 
   if (el === "date-picker")
     return <DatePicker {...({ ...DatePickerDefaultProps, ...props } as DatePickerProps)} />;

@@ -5,8 +5,8 @@ import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import type { Ref } from "react";
 import type { TableProps } from "antd";
 
+import ProTableTitle from "./pro-table-title";
 import SearchBar from "@/components/search-bar";
-import InteractBar from "@/components/interact-bar";
 import styles from "@/components/pro-table/pro-table.module.scss";
 import type { PRes } from "#/api";
 import type { ProColumnsProps, ProTableRef, RecordType } from "#/components/pro-table";
@@ -46,6 +46,7 @@ function UnforwardProTable<T extends RecordType = object>({
   const [current, setCurrent] = useState<number>(1);
   const [size, setSize] = useState<number>(DefaultPageSize);
 
+  const title = interact ? ProTableTitle : undefined;
   const queries = cols?.filter(col => col.search) ?? [];
   const className = `${clsn ?? ""} ${styles.table}`.trim();
 
@@ -104,8 +105,6 @@ function UnforwardProTable<T extends RecordType = object>({
       <Flex vertical align="center" gap="24px" justify="center">
         {!isEmpty(queries) && <SearchBar items={queries} />}
 
-        {interact && <InteractBar />}
-
         <Table<T>
           className={className}
           columns={columns}
@@ -113,6 +112,7 @@ function UnforwardProTable<T extends RecordType = object>({
           loading={isLoading}
           pagination={pagination}
           rowKey={rowKey}
+          title={title}
           {...props}
         />
       </Flex>

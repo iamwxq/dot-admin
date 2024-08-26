@@ -4,9 +4,9 @@ import { ProTableUtil } from "@/utils/cls";
 import { userPageApi } from "@/apis/features/user";
 import ProTable from "@/components/pro-table";
 import styles from "@/pages/sys/login/login.module.scss";
-import type { UserPageParams } from "@/apis/features/user";
 import type { UserInfo } from "#/entities/user";
 import type { ProColumnsProps, ProTableRef } from "#/components/pro-table";
+import type { APIParam } from "#/api";
 
 function Login() {
   const _table = useRef<ProTableRef<UserInfo>>(null);
@@ -29,7 +29,7 @@ function Login() {
       },
     },
     {
-      title: "邮箱",
+      title: () => <div>邮箱</div>,
       dataIndex: "email",
       search: {
         type: "input",
@@ -39,7 +39,7 @@ function Login() {
     {
       title: "性别",
       dataIndex: "gender",
-      enum: ProTableUtil.getEnum("gender"),
+      enum: ProTableUtil.getEnum("gender", { 2: { disabled: true } }),
       search: {
         type: "select",
         props: {},
@@ -53,12 +53,21 @@ function Login() {
         props: {},
       },
     },
+    {
+      title: "生日",
+      dataIndex: "birthday",
+      search: {
+        type: "date-picker",
+        props: {},
+      },
+    },
   ];
 
   return (
     <div className={styles["login-container"]}>
       <ProTable
         ref={_table}
+        interact
         columns={columns}
         expandable={{
           expandedRowRender: (record: UserInfo) => <>{record.id}</>,
@@ -66,12 +75,12 @@ function Login() {
         }}
         request={{
           auto: true,
+          api: userPageApi,
           key: "users/page",
           params: {
             order: "desc",
             orderField: "age",
-          } as UserPageParams,
-          api: userPageApi,
+          } as APIParam<typeof userPageApi>,
         }}
       />
     </div>

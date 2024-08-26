@@ -1,5 +1,7 @@
 import type { UserInfo } from "#/entities/user";
+import { DateFormatEnum } from "#/enums/format";
 import faker from "@/mocks/faker";
+import { dateFormat } from "@/utils";
 
 export function rowUser(): UserInfo {
   return {
@@ -9,5 +11,6 @@ export function rowUser(): UserInfo {
     gender: Math.floor(Math.random() * 3),
     phone: faker.phone.number(),
     username: faker.internet.userName(),
+    birthday: dateFormat(faker.date.birthdate(), DateFormatEnum.YYYYMMDD),
   };
 }

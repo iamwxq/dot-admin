@@ -18,5 +18,6 @@ export interface UserInfo {
   avatar?: string;
   role?: Role;
   status?: UsableStatusEnum;
+  birthday?: string;
   // permission?: unknown;
 }

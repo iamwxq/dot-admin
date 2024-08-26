@@ -12,6 +12,8 @@ import type { PRes } from "#/api";
 interface SearchTypeBase {
   show?: boolean;
   order?: number;
+  label?: string;
+  key?: string;
 }
 
 interface InputSearchType extends SearchTypeBase {
@@ -52,12 +54,13 @@ export interface DataKey {
 
 export interface ColumnEnum {
   label: string;
-  value: string | number | symbol;
+  value: string | number;
   disabled?: boolean;
 }
 
 interface CustomColumnType {
-  search?: boolean | SearchType;
+  isSearch?: boolean;
+  search?: SearchType;
   enum?: Array<ColumnEnum>;
 }
 
@@ -74,4 +77,14 @@ export type ProColumnsProps<T extends RecordType> = ProColumnsType<T>;
 export interface ProTableRef<T extends RecordType> {
   data: Array<T> | undefined;
   refetch: ReturnType<typeof useQuery<PRes<T> | undefined>>["refetch"];
+}
+
+export interface ProTableState {
+  pagenation: {
+    current: number;
+    size: number;
+    total: number;
+  };
+  params: Record<string, any>;
+  loading: boolean;
 }

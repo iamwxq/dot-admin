@@ -20,3 +20,5 @@ export interface PRes<T> {
   current: number;
   list: Array<T & DataKey>;
 }
+
+export type APIParam<T extends (params: any) => Promise<any>> = Parameters<T>["0"];

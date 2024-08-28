@@ -80,11 +80,11 @@ export interface ProTableRef<T extends RecordType> {
 }
 
 export interface ProTableState {
+  auto: boolean;
   pagenation: {
     current: number;
     size: number;
     total: number;
   };
   params: Record<string, any>;
-  loading: boolean;
 }

@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
 import SparkMD5 from "spark-md5";
+import { filter, isEmpty, isNil } from "ramda";
 import FileCutWorker from "@/workers/cut-file-worker?worker";
 import { ByteEnum } from "#/enums/byte";
 import { DateFormatEnum } from "#/enums/format";
@@ -103,4 +104,13 @@ export async function cutFile(
  */
 export function hashPassword(password: string) {
   return SparkMD5.hash(password);
+}
+
+/**
+ * 过滤对象中的 empty 字段或 nullish 字段
+ *
+ * @param obj 待过滤的对象
+ */
+export function filterEmptyProperty(obj: Record<string, any>) {
+  return filter(value => !isEmpty(value) && !isNil(value), obj);
 }

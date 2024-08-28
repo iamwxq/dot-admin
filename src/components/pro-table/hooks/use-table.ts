@@ -1,30 +1,40 @@
 import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 import type { ProTableState, RecordType } from "#/components/pro-table";
 import type { PRes } from "#/api";
 
 interface Options {
-  auto: boolean;
-  initial: RecordType;
-  pageable: boolean ;
+  auto?: boolean;
+  initial?: RecordType ;
+  pageable?: boolean ;
 }
 
+/**
+ * @param key useQuery key
+ * @param api request api
+ * @param options request options
+ * @param fallback fallback after coming across errors
+ */
 export function useTable<T extends RecordType>(
-  key: string,
+  key: string | undefined,
   api?: (params: any) => Promise<PRes<T>>,
-  options: Options = { auto: true, initial: {}, pageable: true },
-  callback?: (data: PRes<T>) => any,
+  options: Options = { auto: true, initial: undefined, pageable: true },
   fallback?: (error: any) => void,
 ) {
   // props
-  const params = {};
-  const { auto, initial, pageable } = options;
+  const {
+    auto = true,
+    initial = undefined,
+    pageable = true,
+  } = options;
 
   // states
   const [state, setState] = useState<ProTableState>({
-    params: {},
-    loading: false,
+    auto: false,
+    // query params
+    params: { ...initial },
+    // enable page
     pagenation: {
       total: 0,
       size: 10,
@@ -33,42 +43,54 @@ export function useTable<T extends RecordType>(
   });
 
   // derived states
-  const param = { page: state.pagenation.current, size: state.pagenation.size };
+  const param = { current: state.pagenation.current, size: state.pagenation.size };
 
   // queries
-  const { data, refetch } = useQuery({
-    queryKey: [key, params],
-    queryFn: () => api?.({}),
+  // data -> table page data
+  const queryClient = useQueryClient();
+  const { data, isFetching, refetch } = useQuery({
+    queryKey: ["pro-table", key, JSON.stringify(state.params)],
+    queryFn: ({ queryKey }) => api?.(JSON.parse(queryKey[2] as string)),
     enabled: false,
   });
 
   // methods
-  async function fetchData() {
-    if (!api)
-      return;
+  function search() {
+    // TODO search data with specify params
+  }
 
-    try {
-      setState(prev => ({ ...prev, loading: true }));
-
-      Object.assign(params, initial, pageable ? param : {});
-      await refetch();
-    }
-    catch (error) {
-      fallback?.(error);
-    }
-    finally {
-      setState(prev => ({ ...prev, loading: false }));
-    }
+  function reset() {
+    // TODO reset table and search params
   }
 
   // side effects
   useEffect(() => {
-    if (auto)
-      fetchData();
-  }, [auto, initial, pageable]);
+    if (!api)
+      return;
+
+    if (auto && !state.auto) {
+      setState(prev => ({ ...prev, auto, params: {
+        ...initial,
+        ...(pageable ? param : {}),
+      } }));
+      queryClient.removeQueries({ queryKey: ["pro-table"], type: "inactive" });
+    }
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      if (state.auto) {
+        await refetch();
+        queryClient.removeQueries({ queryKey: ["pro-table"], type: "inactive" });
+      }
+    })();
+  }, [state.auto]);
 
   return {
     data,
-    fetchData,
+    loading: isFetching,
+
+    search,
+    reset,
   };
 }

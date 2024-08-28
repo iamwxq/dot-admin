@@ -74,7 +74,8 @@ function Login() {
           rowExpandable: (record: UserInfo) => record.gender === 0,
         }}
         request={{
-          auto: true,
+          // auto: false,
+          // instant: true,
           api: userPageApi,
           key: "users/page",
           params: {

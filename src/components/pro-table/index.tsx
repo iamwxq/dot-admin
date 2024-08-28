@@ -1,7 +1,7 @@
 import { isEmpty } from "ramda";
 import { Flex, Table } from "antd";
 import { useQuery } from "@tanstack/react-query";
-import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import type { Ref } from "react";
 import type { TableProps } from "antd";
 
@@ -10,12 +10,14 @@ import SearchBar from "@/components/search-bar";
 import styles from "@/components/pro-table/pro-table.module.scss";
 import type { PRes } from "#/api";
 import type { ProColumnsProps, ProTableRef, RecordType } from "#/components/pro-table";
+import type { SearchBarRef } from "#/components/search-bar";
 
 interface ProTableRequest<T extends RecordType> {
-  auto: boolean;
+  auto?: boolean;
   key: string;
   api: (params: any) => Promise<PRes<T>>;
 
+  instant?: boolean;
   params?: Record<string, any>;
 }
 
@@ -43,8 +45,13 @@ function UnforwardProTable<T extends RecordType = object>({
 
   ...props
 }: ProTableProps<T>, ref: Ref<ProTableRef<T>>) {
+  // states
   const [current, setCurrent] = useState<number>(1);
   const [size, setSize] = useState<number>(DefaultPageSize);
+  const [params, setParams] = useState<RecordType>(request?.params ?? {});
+
+  // refs
+  const _search = useRef<SearchBarRef<any>>(null);
 
   const title = interact ? ProTableTitle : undefined;
   const queries = cols?.filter(col => col.search) ?? [];
@@ -61,10 +68,11 @@ function UnforwardProTable<T extends RecordType = object>({
   });
 
   const { data, refetch, isLoading } = useQuery({
-    queryKey: [request?.key],
-    queryFn: () => request?.api({ current, size, ...request.params }),
+    queryKey: ["pro-table", request?.key],
+    queryFn: () => request?.api({ current, size, ...params }),
     enabled: false,
   });
+
   const dataSource = ds?.length ? ds : data?.list;
 
   const pagination: TableProps<T>["pagination"] = ({
@@ -86,24 +94,42 @@ function UnforwardProTable<T extends RecordType = object>({
     ? Object.hasOwn(dataSource[0], DefaultRowKey) ? DefaultRowKey : undefined
     : undefined);
 
+  // handles
   useImperativeHandle(ref, () => ({
     data: data?.list,
     refetch,
   }), [data, refetch]);
 
+  // side effects
   useEffect(() => {
     if (!request || !columns)
       return;
 
     const { auto } = request;
-    if (!ds && auto)
+    if (!ds && (auto === undefined || auto))
       refetch();
   }, [current, size, request]);
+
+  useEffect(() => {
+    if (!request || !columns)
+      return;
+
+    const { instant } = request;
+    if (instant === undefined || instant)
+      refetch();
+  }, [params]);
 
   return (
     <div className={styles["pro-table__container"]}>
       <Flex vertical align="center" gap="24px" justify="center">
-        {!isEmpty(queries) && <SearchBar items={queries} />}
+        {!isEmpty(queries) && (
+          <SearchBar
+            ref={_search}
+            items={queries}
+            listen={_params => setParams(_params)}
+            params={request?.params}
+          />
+        )}
 
         <Table<T>
           className={className}

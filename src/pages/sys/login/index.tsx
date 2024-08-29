@@ -24,6 +24,7 @@ function Login() {
       title: "年龄",
       dataIndex: "age",
       search: {
+        label: "年龄(age)",
         type: "input-number",
         props: {},
       },
@@ -49,6 +50,7 @@ function Login() {
       title: "手机号",
       dataIndex: "phone",
       search: {
+        order: 2,
         type: "input",
         props: {},
       },
@@ -57,6 +59,7 @@ function Login() {
       title: "生日",
       dataIndex: "birthday",
       search: {
+        order: 1,
         type: "date-picker",
         props: {},
       },
@@ -75,7 +78,7 @@ function Login() {
         }}
         request={{
           // auto: false,
-          // instant: true,
+          // instant: false,
           api: userPageApi,
           key: "users/page",
           params: {

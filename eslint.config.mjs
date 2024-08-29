@@ -19,6 +19,7 @@ export default antfu(
       "react/prop-types": "off",
       "react-refresh/only-export-components": "off",
       "react-hooks/exhaustive-deps": "off",
+      "react/no-duplicate-key": "off",
       "style/jsx-one-expression-per-line": "off",
       "style/jsx-sort-props": [
         "error",

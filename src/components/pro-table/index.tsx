@@ -1,22 +1,24 @@
-import { isEmpty } from "ramda";
 import { Flex, Table } from "antd";
+import { equals, isEmpty } from "ramda";
+import { usePrevious } from "@reactuses/core";
 import { useQuery } from "@tanstack/react-query";
-import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 import type { Ref } from "react";
 import type { TableProps } from "antd";
 
-import ProTableTitle from "./pro-table-title";
-import SearchBar from "@/components/search-bar";
-import styles from "@/components/pro-table/pro-table.module.scss";
 import type { PRes } from "#/api";
-import type { ProColumnsProps, ProTableRef, RecordType } from "#/components/pro-table";
 import type { SearchBarRef } from "#/components/search-bar";
+import type { ProColumnsProps, ProTableRef, RecordType } from "#/components/pro-table";
+
+import SearchBar from "@/components/search-bar";
+import ProTableTitle from "@/components/pro-table/pro-table-title";
+import styles from "@/components/pro-table/pro-table.module.scss";
 
 interface ProTableRequest<T extends RecordType> {
-  auto?: boolean;
   key: string;
   api: (params: any) => Promise<PRes<T>>;
 
+  auto?: boolean;
   instant?: boolean;
   params?: Record<string, any>;
 }
@@ -27,6 +29,7 @@ interface ProTableProps<T extends RecordType> extends TableProps<T> {
   request?: ProTableRequest<T>;
 }
 
+// default constants
 const DefaultRowKey = "id";
 const DefaultPageSize = 10;
 const DefaultPaginationProps: TableProps["pagination"] = {
@@ -46,18 +49,20 @@ function UnforwardProTable<T extends RecordType = object>({
   ...props
 }: ProTableProps<T>, ref: Ref<ProTableRef<T>>) {
   // states
+  const [render, setRender] = useState(true);
   const [current, setCurrent] = useState<number>(1);
   const [size, setSize] = useState<number>(DefaultPageSize);
   const [params, setParams] = useState<RecordType>(request?.params ?? {});
+  const $params = usePrevious(params);
 
   // refs
   const _search = useRef<SearchBarRef<any>>(null);
 
-  const title = interact ? ProTableTitle : undefined;
-  const queries = cols?.filter(col => col.search) ?? [];
-  const className = `${clsn ?? ""} ${styles.table}`.trim();
+  const queries = useMemo(() => cols?.filter(col => col.search) ?? [], [cols]);
+  const className = useMemo(() => `${clsn ?? ""} ${styles.table}`.trim(), [clsn]);
+  const title = useMemo(() => interact === undefined || interact ? ProTableTitle : undefined, [interact]);
 
-  const columns = cols?.map((col) => {
+  const columns = useMemo(() => cols?.map((col) => {
     if (!col.enum || col.render)
       return { ...col };
 
@@ -65,17 +70,17 @@ function UnforwardProTable<T extends RecordType = object>({
       ...col,
       render: (value: any) => <>{col.enum!.find(item => item.value === value)?.label ?? (value ?? "-")}</>,
     };
-  });
+  }), [cols]);
 
-  const { data, refetch, isLoading } = useQuery({
+  const { data, refetch, isFetching } = useQuery({
     queryKey: ["pro-table", request?.key],
     queryFn: () => request?.api({ current, size, ...params }),
     enabled: false,
   });
 
-  const dataSource = ds?.length ? ds : data?.list;
+  const dataSource = useMemo(() => ds?.length ? ds : data?.list, [ds, data]);
 
-  const pagination: TableProps<T>["pagination"] = ({
+  const pagination: TableProps<T>["pagination"] = useMemo(() => ({
     current,
     pageSize: size,
     total: data?.total,
@@ -88,21 +93,25 @@ function UnforwardProTable<T extends RecordType = object>({
     },
     ...DefaultPaginationProps,
     ...pgn,
-  });
+  }), [data, pgn]);
 
-  const rowKey: TableProps<T>["rowKey"] = rk || (dataSource?.length
+  const rowKey: TableProps<T>["rowKey"] = useMemo(() => rk || (dataSource?.length
     ? Object.hasOwn(dataSource[0], DefaultRowKey) ? DefaultRowKey : undefined
-    : undefined);
+    : undefined), [rk, dataSource]);
 
   // handles
   useImperativeHandle(ref, () => ({
-    data: data?.list,
     refetch,
+    data: data?.list,
   }), [data, refetch]);
 
   // side effects
   useEffect(() => {
-    if (!request || !columns)
+    setRender(false);
+  }, []);
+
+  useEffect(() => {
+    if (!request)
       return;
 
     const { auto } = request;
@@ -111,11 +120,11 @@ function UnforwardProTable<T extends RecordType = object>({
   }, [current, size, request]);
 
   useEffect(() => {
-    if (!request || !columns)
+    if (!request || render || equals($params, params))
       return;
 
     const { instant } = request;
-    if (instant === undefined || instant)
+    if (!ds && (instant === undefined || instant))
       refetch();
   }, [params]);
 
@@ -135,7 +144,7 @@ function UnforwardProTable<T extends RecordType = object>({
           className={className}
           columns={columns}
           dataSource={dataSource}
-          loading={isLoading}
+          loading={isFetching}
           pagination={pagination}
           rowKey={rowKey}
           title={title}

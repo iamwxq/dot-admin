@@ -56,6 +56,7 @@ export interface ColumnEnum {
   label: string;
   value: string | number;
   disabled?: boolean;
+  className?: string;
 }
 
 interface CustomColumnType {

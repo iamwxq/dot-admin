@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import {
   DatePicker,
   Input,
@@ -12,7 +13,10 @@ import type {
   SelectProps,
   TimePickerProps,
 } from "antd";
-import dayjs from "dayjs";
+import { useEffect, useState } from "react";
+import { useDebounceFn } from "@reactuses/core";
+
+import { MSecsEnum } from "#/enums/time";
 import type { ColumnEnum, SearchType } from "#/components/pro-table";
 
 interface SearchBarItemProps {
@@ -20,6 +24,7 @@ interface SearchBarItemProps {
   dataIndex: string;
   value: any;
   onChange: (value: any) => void;
+
   em?: Array<ColumnEnum>;
   props?: SearchType["props"];
 }
@@ -30,6 +35,7 @@ const InputDefaultProps: InputProps = {
 };
 
 const InputNumberDefaultProps: InputNumberProps = {
+  controls: true,
   placeholder: "请输入",
 };
 
@@ -48,12 +54,29 @@ const TimePickerDefaultProps: TimePickerProps = {
   allowClear: true,
 };
 
-function SearchBarItem({ el, em, props, value, onChange }: SearchBarItemProps) {
+function SearchBarItem({ el, em, props, value: _value, onChange }: SearchBarItemProps) {
+  const [value, setValue] = useState<any>(_value);
+  const { run } = useDebounceFn(() => onChange(value), MSecsEnum.MS300);
+
+  useEffect(() => {
+    switch (el) {
+      case "select":
+      case "date-picker":
+      case "time-picker":
+        onChange(value);
+        break;
+
+      default:
+        run();
+        break;
+    }
+  }, [value, el]);
+
   if (el === "input-number") {
     return (
       <InputNumber
         value={value}
-        onChange={value => onChange(value)}
+        onChange={value => setValue(value)}
         {...({ ...InputNumberDefaultProps, ...props } as InputNumberProps)}
       />
     );
@@ -64,7 +87,7 @@ function SearchBarItem({ el, em, props, value, onChange }: SearchBarItemProps) {
       <Select
         options={em}
         value={value}
-        onChange={value => onChange(value)}
+        onChange={value => setValue(value)}
         {...({ ...SelectDefaultProps, ...props } as SelectProps)}
       />
     );
@@ -74,7 +97,7 @@ function SearchBarItem({ el, em, props, value, onChange }: SearchBarItemProps) {
     return (
       <DatePicker
         value={value ? dayjs(value) : undefined}
-        onChange={value => onChange(value)}
+        onChange={value => setValue(value)}
         {...({ ...DatePickerDefaultProps, ...props } as DatePickerProps)}
       />
     );
@@ -84,7 +107,7 @@ function SearchBarItem({ el, em, props, value, onChange }: SearchBarItemProps) {
     return (
       <TimePicker
         value={value ? dayjs(value) : undefined}
-        onChange={value => onChange(value)}
+        onChange={value => setValue(value)}
         {...({ ...TimePickerDefaultProps, ...props } as TimePickerProps)}
       />
     );
@@ -93,7 +116,7 @@ function SearchBarItem({ el, em, props, value, onChange }: SearchBarItemProps) {
   return (
     <Input
       value={value}
-      onChange={value => onChange(value.target.value)}
+      onChange={value => setValue(value.target.value)}
       {...({ ...InputDefaultProps, ...props } as InputProps)}
     />
   );

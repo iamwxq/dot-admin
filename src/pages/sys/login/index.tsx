@@ -16,6 +16,7 @@ function Login() {
       title: "用户名",
       dataIndex: "username",
       search: {
+        key: "username",
         type: "input",
         props: {},
       },

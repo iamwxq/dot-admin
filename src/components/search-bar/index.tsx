@@ -28,7 +28,7 @@ function UnforwardSearchBar<T extends RecordType>({
 }: SearchBarProps<T>, ref: Ref<SearchBarRef<T>>) {
   // props
   const cols = useMemo(() => items.map((col: ProColumnType<T>) => ({ ...col, search: col.search! })).sort(_colsSortFn), [items]);
-  const props = useMemo(() => cols.map((col: ProColumnType<T>) => col.dataIndex) as Array<string>, [items]);
+  const props = useMemo(() => cols.map((col: ProColumnType<T>) => col.search?.key ?? col.dataIndex) as Array<string>, [items]);
 
   // states
   const [params, setParams] = useState<T>(_params ?? {} as T);

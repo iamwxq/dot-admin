@@ -1,30 +1,34 @@
-import { HttpResponse } from "msw";
-import type { HttpHandler } from "msw";
-import { rowUser } from "./data";
-import { HttpMock } from "@/mocks";
-import { UserUrl } from "@/apis/features/user";
-import type { UserPageRes } from "@/apis/features/user";
 import type { UserInfo } from "#/entities/user";
+import type { UserPageRes } from "@/apis/features/user";
+import type { HttpHandler } from "msw";
+import { UserUrl } from "@/apis/features/user";
+import { HttpMock } from "@/mocks";
+import { HttpResponse } from "msw";
+import { userRow } from "./data";
 
 const userPage: HttpHandler = HttpMock.get(UserUrl.Page, ({ request }) => {
   const url = new URL(request.url);
+  const params = url.searchParams;
 
-  const size = Number(url.searchParams.get("size"));
-  const current = Number(url.searchParams.get("current"));
+  const size = Number(params.get("size"));
+  const current = Number(params.get("current"));
 
-  const data: UserInfo[] = [];
-  for (let i = 0; i < size; i++) data.push(rowUser());
+  const data: Array<UserInfo> = [];
+  for (let i = 0; i < size; i++) {
+    const user = userRow();
+    data.push(user);
+  }
 
-  return HttpResponse.json(HttpMock.success({
+  const response: UserPageRes = {
     size,
     current,
     list: data,
     total: 100,
-  } as UserPageRes));
+  };
+
+  return HttpResponse.json(HttpMock.success(response));
 });
 
-const handlers: HttpHandler[] = [
-  userPage,
-];
+const handlers: Array<HttpHandler> = [userPage];
 
 export default handlers;

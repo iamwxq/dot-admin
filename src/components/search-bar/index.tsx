@@ -1,15 +1,15 @@
-import dayjs from "dayjs";
-import { Flex } from "antd";
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from "react";
-import type { Ref } from "react";
-
-import { filterEmptyProperty } from "@/utils";
-import { DateFormatEnum } from "#/enums/format";
+import type { ProColumnsProps, ProColumnType, RecordType } from "#/components/pro-table";
 import type { SearchBarRef } from "#/components/search-bar";
-import type { ProColumnType, ProColumnsProps, RecordType } from "#/components/pro-table";
+import type { Ref } from "react";
+import { DateFormatEnum } from "#/enums/format";
 
-import SearchBarItem from "@/components/search-bar/search-bar-item";
 import styles from "@/components/search-bar/search-bar.module.scss";
+import SearchBarItem from "@/components/search-bar/search-bar-item";
+import { filterEmptyProperty } from "@/utils";
+import { Flex } from "antd";
+
+import dayjs from "dayjs";
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from "react";
 
 interface SearchBarProps<T extends RecordType = any> {
   items: ProColumnsProps<T>;
@@ -63,10 +63,7 @@ function UnforwardSearchBar<T extends RecordType>({
       <Flex align="center" className={styles.ul} gap="20px">
         {cols.map((col, i) => {
           const _key = col.search.key ?? col.dataIndex!.toString();
-          const _label = col.search.label
-            ?? (typeof col.title !== "function"
-              ? col.title
-              : <col.title />);
+          const _label = col.search.label ?? (typeof col.title !== "function" ? col.title : <col.title />);
 
           return (
             <Flex

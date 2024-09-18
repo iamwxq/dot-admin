@@ -3,7 +3,7 @@ import { DateFormatEnum } from "#/enums/format";
 import faker from "@/mocks/faker";
 import { dateFormat } from "@/utils";
 
-export function rowUser(): UserInfo {
+export function userRow(): UserInfo {
   return {
     id: faker.string.uuid(),
     age: Math.floor(Math.random() * 99 + 1),

@@ -1,5 +1,4 @@
 import type { CodeEnum } from "#/enums/http";
-import type { DataKey } from "#/components/pro-table";
 
 export interface Result<T = any> {
   msg: string;
@@ -18,7 +17,7 @@ export interface PRes<T> {
   size: number;
   total: number;
   current: number;
-  list: Array<T & DataKey>;
+  list: Array<T>;
 }
 
 export type APIParam<T extends (params: any) => Promise<any>> = Parameters<T>["0"];

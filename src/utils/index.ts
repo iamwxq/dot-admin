@@ -1,10 +1,10 @@
-import dayjs from "dayjs";
-import SparkMD5 from "spark-md5";
-import { filter, isEmpty, isNil } from "ramda";
-import FileCutWorker from "@/workers/cut-file-worker?worker";
+import type { FileChunk } from "#/utils";
 import { ByteEnum } from "#/enums/byte";
 import { DateFormatEnum } from "#/enums/format";
-import type { FileChunk } from "#/utils";
+import FileCutWorker from "@/workers/cut-file-worker?worker";
+import dayjs from "dayjs";
+import { filter, isEmpty, isNil } from "ramda";
+import SparkMD5 from "spark-md5";
 
 /**
  * 用于格式化后端提供的时间
@@ -113,4 +113,14 @@ export function hashPassword(password: string) {
  */
 export function filterEmptyProperty(obj: Record<string, any>) {
   return filter(value => !isEmpty(value) && !isNil(value), obj);
+}
+
+/**
+ * 等待指定时间
+ *
+ * @param s 等待秒数
+ */
+export async function sleep(s: number) {
+  const ms = s * 1_000;
+  return new Promise(resolve => setTimeout(resolve, ms));
 }

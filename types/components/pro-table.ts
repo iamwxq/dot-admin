@@ -1,3 +1,4 @@
+import type { PRes } from "#/api";
 import type { useQuery } from "@tanstack/react-query";
 import type {
   DatePickerProps,
@@ -7,7 +8,6 @@ import type {
   TimePickerProps,
 } from "antd";
 import type { ColumnType } from "antd/es/table";
-import type { PRes } from "#/api";
 
 interface SearchTypeBase {
   show?: boolean;
@@ -80,12 +80,4 @@ export interface ProTableRef<T extends RecordType> {
   refetch: ReturnType<typeof useQuery<PRes<T> | undefined>>["refetch"];
 }
 
-export interface ProTableState {
-  auto: boolean;
-  pagenation: {
-    current: number;
-    size: number;
-    total: number;
-  };
-  params: Record<string, any>;
-}
+export type ProTableInteractButtons = Array<"refresh" | "setting" | "search"> | boolean;

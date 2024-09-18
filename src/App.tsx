@@ -1,6 +1,6 @@
-import { App as AntdApp } from "antd";
 import AntdConfigProvider from "@/components/antd";
 import Router from "@/routers";
+import { App as AntdApp } from "antd";
 
 function App() {
   return (

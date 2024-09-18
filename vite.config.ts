@@ -32,6 +32,7 @@ const additionalData: string = [
   `@use "@/styles/_fonts.scss" as *;`,
   `@use "@/styles/_variables.scss" as *;`,
   `@use "@/styles/_mixins.scss" as *;`,
+  `@use "@/styles/_antd.override.scss" as *;`,
   `@use "@/styles/_global.scss" as *;`,
 ].join("");
 

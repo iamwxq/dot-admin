@@ -1,4 +1,4 @@
-import axios, { AxiosHeaders } from "axios";
+import type { Result } from "#/api";
 import type {
   AxiosError,
   AxiosInstance,
@@ -7,10 +7,11 @@ import type {
   CreateAxiosDefaults,
   InternalAxiosRequestConfig,
 } from "axios";
-import { message } from "antd";
-import { checkStatus } from "@/apis/helpers";
 import { CodeEnum, ContentTypeEnum, HttpEnum } from "#/enums/http";
-import type { Result } from "#/api";
+import { checkStatus } from "@/apis/helpers";
+import { sleep } from "@/utils";
+import { message } from "antd";
+import axios, { AxiosHeaders } from "axios";
 
 const { VITE_API_URL: API_URL, VITE_APP_MOCK: MOCK } = import.meta.env;
 
@@ -34,7 +35,8 @@ class HttpRequest {
      * @description 请求拦截器
      */
     this.instance.interceptors.request.use(
-      (config: InternalAxiosRequestConfig) => {
+      async (config: InternalAxiosRequestConfig) => {
+        await sleep(0.7); // TODO mocking requests delay, to be removed
         return config;
       },
       (err: AxiosError) => {

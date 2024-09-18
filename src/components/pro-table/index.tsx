@@ -1,18 +1,21 @@
-import { Flex, Table } from "antd";
-import { equals, isEmpty } from "ramda";
+import type { PRes } from "#/api";
+import type {
+  ProColumnsProps,
+  ProTableInteractButtons,
+  ProTableRef,
+  RecordType,
+} from "#/components/pro-table";
+import type { SearchBarRef } from "#/components/search-bar";
+import type { TableProps } from "antd";
+import type { Ref } from "react";
+import styles from "@/components/pro-table/pro-table.module.scss";
+import ProTableInteractBarComp from "@/components/pro-table/pro-table-interact-bar.tsx";
+import SearchBar from "@/components/search-bar";
 import { usePrevious } from "@reactuses/core";
 import { useQuery } from "@tanstack/react-query";
+import { Flex, Table } from "antd";
+import { equals, isEmpty, isNil } from "ramda";
 import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
-import type { Ref } from "react";
-import type { TableProps } from "antd";
-
-import type { PRes } from "#/api";
-import type { SearchBarRef } from "#/components/search-bar";
-import type { ProColumnsProps, ProTableRef, RecordType } from "#/components/pro-table";
-
-import SearchBar from "@/components/search-bar";
-import ProTableTitle from "@/components/pro-table/pro-table-title";
-import styles from "@/components/pro-table/pro-table.module.scss";
 
 interface ProTableRequest<T extends RecordType> {
   key: string;
@@ -25,7 +28,9 @@ interface ProTableRequest<T extends RecordType> {
 
 interface ProTableProps<T extends RecordType> extends TableProps<T> {
   columns?: ProColumnsProps<T>;
-  interact?: boolean;
+  interact?: {
+    buttons?: ProTableInteractButtons;
+  } | boolean;
   request?: ProTableRequest<T>;
 }
 
@@ -42,25 +47,26 @@ function UnforwardProTable<T extends RecordType = object>({
   dataSource: ds,
   pagination: pgn,
   rowKey: rk,
+  // title: _t,
 
-  interact = true,
   request,
+  interact: _interact,
 
   ...props
 }: ProTableProps<T>, ref: Ref<ProTableRef<T>>) {
   // states
   const [render, setRender] = useState(true);
   const [current, setCurrent] = useState<number>(1);
+  const [enable, setEnable] = useState<boolean>(true); // to control search bar enable status
   const [size, setSize] = useState<number>(DefaultPageSize);
   const [params, setParams] = useState<RecordType>(request?.params ?? {});
-  const $params = usePrevious(params);
+  const $params = usePrevious(params); // record previous params to compare and decide whether refetch data
 
   // refs
   const _search = useRef<SearchBarRef<any>>(null);
 
   const queries = useMemo(() => cols?.filter(col => col.search) ?? [], [cols]);
   const className = useMemo(() => `${clsn ?? ""} ${styles.table}`.trim(), [clsn]);
-  const title = useMemo(() => interact === undefined || interact ? ProTableTitle : undefined, [interact]);
 
   const columns = useMemo(() => cols?.map((col) => {
     if (!col.enum || col.render)
@@ -77,6 +83,25 @@ function UnforwardProTable<T extends RecordType = object>({
     queryFn: () => request?.api({ current, size, ...params }),
     enabled: false,
   });
+
+  const ProTableInteractBar = useMemo(() => {
+    const show = isNil(_interact)
+      || _interact === true
+      || typeof _interact !== "boolean";
+
+    const buttons = show && (_interact as Exclude<ProTableProps<T>["interact"], boolean>)?.buttons;
+
+    return show
+      ? () => (
+          <ProTableInteractBarComp
+            buttons={buttons}
+            dataLoading={isFetching}
+            onDataRefresh={refetch}
+            onEnableSearch={() => setEnable(e => !e)}
+          />
+        )
+      : undefined;
+  }, [_interact, isFetching, refetch]);
 
   const dataSource = useMemo(() => ds?.length ? ds : data?.list, [ds, data]);
 
@@ -115,7 +140,7 @@ function UnforwardProTable<T extends RecordType = object>({
       return;
 
     const { auto } = request;
-    if (!ds && (auto === undefined || auto))
+    if (!ds && (isNil(auto) || auto))
       refetch();
   }, [current, size, request]);
 
@@ -124,14 +149,14 @@ function UnforwardProTable<T extends RecordType = object>({
       return;
 
     const { instant } = request;
-    if (!ds && (instant === undefined || instant))
+    if (!ds && (isNil(instant) || instant))
       refetch();
   }, [params]);
 
   return (
     <div className={styles["pro-table__container"]}>
       <Flex vertical align="center" gap="24px" justify="center">
-        {!isEmpty(queries) && (
+        {!isEmpty(queries) && enable && (
           <SearchBar
             ref={_search}
             items={queries}
@@ -140,6 +165,8 @@ function UnforwardProTable<T extends RecordType = object>({
           />
         )}
 
+        {ProTableInteractBar && <ProTableInteractBar />}
+
         <Table<T>
           className={className}
           columns={columns}
@@ -147,13 +174,12 @@ function UnforwardProTable<T extends RecordType = object>({
           loading={isFetching}
           pagination={pagination}
           rowKey={rowKey}
-          title={title}
           {...props}
         />
       </Flex>
     </div>
   );
-};
+}
 
 // TODO: fix it
 // how to make a forward component generic???

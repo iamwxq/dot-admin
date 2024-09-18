@@ -1,12 +1,11 @@
-import { useRef } from "react";
-
-import { ProTableUtil } from "@/utils/cls";
+import type { APIParam } from "#/api";
+import type { ProColumnsProps, ProTableRef } from "#/components/pro-table";
+import type { UserInfo } from "#/entities/user";
 import { userPageApi } from "@/apis/features/user";
 import ProTable from "@/components/pro-table";
 import styles from "@/pages/sys/login/login.module.scss";
-import type { UserInfo } from "#/entities/user";
-import type { ProColumnsProps, ProTableRef } from "#/components/pro-table";
-import type { APIParam } from "#/api";
+import { ProTableUtil } from "@/utils/cls";
+import { useRef } from "react";
 
 function Login() {
   const _table = useRef<ProTableRef<UserInfo>>(null);
@@ -35,7 +34,9 @@ function Login() {
       dataIndex: "email",
       search: {
         type: "input",
-        props: {},
+        props: {
+
+        },
       },
     },
     {
@@ -71,11 +72,13 @@ function Login() {
     <div className={styles["login-container"]}>
       <ProTable
         ref={_table}
-        interact
         columns={columns}
         expandable={{
           expandedRowRender: (record: UserInfo) => <>{record.id}</>,
           rowExpandable: (record: UserInfo) => record.gender === 0,
+        }}
+        interact={{
+          buttons: ["refresh", "refresh"],
         }}
         request={{
           // auto: false,

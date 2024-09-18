@@ -1,5 +1,5 @@
-import { dicts } from "@/utils/dicts";
 import type { ColumnEnum } from "#/components/pro-table";
+import { dicts } from "@/utils/dicts";
 
 type Dict = keyof typeof dicts;
 type ValueOfDict<T extends Dict> = keyof typeof dicts[T];

@@ -85,7 +85,7 @@ export class HttpRequest {
     return HttpRequest.axiosInstance.get(url, { ...options, params });
   }
 
-  public post<T>({ url, data, options = {} }: {
+  public post<T>({ url, data, options }: {
     url: string;
     data?: object;
     options?: OmitData;
@@ -101,7 +101,7 @@ export class HttpRequest {
     return HttpRequest.axiosInstance.put(url, data, options);
   }
 
-  public delete<T>({ url, params, options }: {
+  public delete<T>({ url, params, options = {} }: {
     url: string;
     params?: object;
     options?: OmitParams;
@@ -109,7 +109,7 @@ export class HttpRequest {
     return HttpRequest.axiosInstance.delete(url, { ...options, params });
   }
 
-  public stream({ url, data, options }: {
+  public stream({ url, data, options = {} }: {
     url: string;
     data?: object;
     options?: StreamOption;

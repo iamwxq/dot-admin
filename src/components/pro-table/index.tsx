@@ -47,14 +47,12 @@ function UnforwardProTable<T extends RecordType = object>({
   dataSource: ds,
   pagination: pgn,
   rowKey: rk,
-  // title: _t,
 
   request,
   interact: _interact,
 
   ...props
 }: ProTableProps<T>, ref: Ref<ProTableRef<T>>) {
-  // states
   const [render, setRender] = useState(true);
   const [current, setCurrent] = useState<number>(1);
   const [enable, setEnable] = useState<boolean>(true); // to control search bar enable status
@@ -62,7 +60,6 @@ function UnforwardProTable<T extends RecordType = object>({
   const [params, setParams] = useState<RecordType>(request?.params ?? {});
   const $params = usePrevious(params); // record previous params to compare and decide whether refetch data
 
-  // refs
   const _search = useRef<SearchBarRef<any>>(null);
 
   const queries = useMemo(() => cols?.filter(col => col.search) ?? [], [cols]);
@@ -124,13 +121,11 @@ function UnforwardProTable<T extends RecordType = object>({
     ? Object.hasOwn(dataSource[0], DefaultRowKey) ? DefaultRowKey : undefined
     : undefined), [rk, dataSource]);
 
-  // handles
   useImperativeHandle(ref, () => ({
     refetch,
     data: data?.list,
   }), [data, refetch]);
 
-  // side effects
   useEffect(() => {
     setRender(false);
   }, []);

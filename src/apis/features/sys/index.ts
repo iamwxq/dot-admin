@@ -1,10 +1,12 @@
-import { http } from "@/apis";
 import type { UserInfo, UserToken } from "#/entities/user";
+import { HttpRequest } from "@/apis";
+
+const http = HttpRequest.getInstance();
 
 export enum AuthUrl {
   SIGNIN = "/auth/signin",
   LOGOUT = "/auth/logout",
-};
+}
 
 export type SignInRes = UserToken & { user: UserInfo };
 export interface SignInParams {

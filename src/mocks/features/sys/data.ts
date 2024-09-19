@@ -1,6 +1,6 @@
-import faker from "@/mocks/faker";
 import type { SignInRes } from "@/apis/features/sys";
 import { UsableStatusEnum } from "#/enums/sys";
+import faker from "@/mocks/faker";
 
 export function signInRes(): SignInRes {
   const exp = Math.floor(Date.now() / 1000) + (60 * 60);

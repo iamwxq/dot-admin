@@ -78,7 +78,7 @@ function Login() {
           rowExpandable: (record: UserInfo) => record.gender === 0,
         }}
         interact={{
-          buttons: ["refresh", "refresh"],
+          // buttons: ["refresh", "refresh"],
         }}
         request={{
           // auto: false,

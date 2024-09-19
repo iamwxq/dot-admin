@@ -9,9 +9,12 @@ import type {
 } from "axios";
 import { CodeEnum, ContentTypeEnum, HttpEnum } from "#/enums/http";
 import { checkStatus } from "@/apis/helpers";
-import { sleep } from "@/utils";
 import { message } from "antd";
 import axios, { AxiosHeaders } from "axios";
+
+type OmitData = Omit<AxiosRequestConfig, "data">;
+type OmitParams = Omit<AxiosRequestConfig, "params">;
+type StreamOption = Omit<AxiosRequestConfig, "data" | "responseType">;
 
 const { VITE_API_URL: API_URL, VITE_APP_MOCK: MOCK } = import.meta.env;
 
@@ -25,18 +28,19 @@ const basicConfig: CreateAxiosDefaults = {
   timeout: <number>HttpEnum.TIMEOUT,
 };
 
-class HttpRequest {
-  private instance: AxiosInstance;
+export class HttpRequest {
+  private static axiosInstance: AxiosInstance;
+  private static httpRequestInstance: HttpRequest;
 
-  public constructor(config: CreateAxiosDefaults) {
-    this.instance = axios.create(config);
+  private constructor(config: CreateAxiosDefaults) {
+    HttpRequest.axiosInstance = axios.create(config);
 
     /**
      * @description 请求拦截器
      */
-    this.instance.interceptors.request.use(
+    HttpRequest.axiosInstance.interceptors.request.use(
       async (config: InternalAxiosRequestConfig) => {
-        await sleep(0.7); // TODO mocking requests delay, to be removed
+        // await sleep(0.7); // mock requests delay, to be removed
         return config;
       },
       (err: AxiosError) => {
@@ -47,7 +51,7 @@ class HttpRequest {
     /**
      * @description 响应拦截器
      */
-    this.instance.interceptors.response.use(
+    HttpRequest.axiosInstance.interceptors.response.use(
       (response: AxiosResponse) => {
         const { data, code, msg } = response.data as Result;
 
@@ -69,45 +73,47 @@ class HttpRequest {
     );
   }
 
+  public static getInstance(): HttpRequest {
+    return (HttpRequest.httpRequestInstance ??= new HttpRequest(basicConfig));
+  }
+
   public get<T>({ url, params, options = {} }: {
     url: string;
     params?: object;
-    options?: Omit<AxiosRequestConfig, "params">;
+    options?: OmitParams;
   }): Promise<T> {
-    return this.instance.get(url, { ...options, params });
+    return HttpRequest.axiosInstance.get(url, { ...options, params });
   }
 
   public post<T>({ url, data, options = {} }: {
     url: string;
     data?: object;
-    options?: Omit<AxiosRequestConfig, "data">;
+    options?: OmitData;
   }): Promise<T> {
-    return this.instance.post(url, data, options);
+    return HttpRequest.axiosInstance.post(url, data, options);
   }
 
   public put<T>({ url, data, options }: {
     url: string;
     data?: object;
-    options?: Omit<AxiosRequestConfig, "data">;
+    options?: OmitData;
   }): Promise<T> {
-    return this.instance.put(url, data, options);
+    return HttpRequest.axiosInstance.put(url, data, options);
   }
 
   public delete<T>({ url, params, options }: {
     url: string;
     params?: object;
-    options?: Omit<AxiosRequestConfig, "params">;
+    options?: OmitParams;
   }): Promise<T> {
-    return this.instance.delete(url, { ...options, params });
+    return HttpRequest.axiosInstance.delete(url, { ...options, params });
   }
 
   public stream({ url, data, options }: {
     url: string;
     data?: object;
-    options?: Omit<AxiosRequestConfig, "data" | "responseType">;
+    options?: StreamOption;
   }): Promise<BlobPart> {
-    return this.instance.post(url, data, { ...options, responseType: "blob" });
+    return HttpRequest.axiosInstance.post(url, data, { ...options, responseType: "blob" });
   }
 }
-
-export const http = new HttpRequest(basicConfig);

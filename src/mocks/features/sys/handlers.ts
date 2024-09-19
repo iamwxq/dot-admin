@@ -1,11 +1,10 @@
-import { HttpResponse } from "msw";
+import type { SignInParams } from "@/apis/features/sys";
 import type { HttpHandler } from "msw";
-
-import { signInRes } from "./data";
-import { HttpMock } from "@/mocks";
 import { CodeEnum } from "#/enums/http";
 import { AuthUrl } from "@/apis/features/sys";
-import type { SignInParams } from "@/apis/features/sys";
+import { HttpMock } from "@/mocks";
+import { HttpResponse } from "msw";
+import { signInRes } from "./data";
 
 /**
  * @description 登录

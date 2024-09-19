@@ -1,6 +1,8 @@
-import { http } from "@/apis";
 import type { PParam, PRes } from "#/api";
 import type { UserInfo } from "#/entities/user";
+import { HttpRequest } from "@/apis";
+
+const http = HttpRequest.getInstance();
 
 export enum UserUrl {
   Page = "/users/page",

@@ -1,7 +1,7 @@
-import type { HttpHandler } from "msw";
-import { http } from "msw";
 import type { Result } from "#/api";
+import type { HttpHandler } from "msw";
 import { CodeEnum } from "#/enums/http";
+import { http } from "msw";
 
 const { VITE_API_URL: API_URL } = import.meta.env;
 

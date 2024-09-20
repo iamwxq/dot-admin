@@ -4,7 +4,7 @@ import { HttpRequest } from "@/apis";
 const http = HttpRequest.getInstance();
 
 export enum AuthUrl {
-  SIGNIN = "/auth/signin",
+  SIGN_IN = "/auth/signin",
   LOGOUT = "/auth/logout",
 }
 
@@ -15,7 +15,7 @@ export interface SignInParams {
 }
 
 export function signin(data: SignInParams) {
-  return http.post<SignInRes>({ url: AuthUrl.SIGNIN, data });
+  return http.post<SignInRes>({ url: AuthUrl.SIGN_IN, data });
 }
 
 export function logout() {

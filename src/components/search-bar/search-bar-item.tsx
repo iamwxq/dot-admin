@@ -1,11 +1,4 @@
-import dayjs from "dayjs";
-import {
-  DatePicker,
-  Input,
-  InputNumber,
-  Select,
-  TimePicker,
-} from "antd";
+import type { ColumnEnum, SearchType } from "#/components/pro-table";
 import type {
   DatePickerProps,
   InputNumberProps,
@@ -13,17 +6,24 @@ import type {
   SelectProps,
   TimePickerProps,
 } from "antd";
-import { useEffect, useState } from "react";
-import { useDebounceFn } from "@reactuses/core";
-
 import { MSecsEnum } from "#/enums/time";
-import type { ColumnEnum, SearchType } from "#/components/pro-table";
+import { useDebounceFn } from "@reactuses/core";
+import {
+  DatePicker,
+  Input,
+  InputNumber,
+  Select,
+  TimePicker,
+} from "antd";
+import dayjs from "dayjs";
+import { useEffect, useState } from "react";
 
 interface SearchBarItemProps {
   el: SearchType["type"];
   dataIndex: string;
   value: any;
   onChange: (value: any) => void;
+  onListen: () => void;
 
   em?: Array<ColumnEnum>;
   props?: SearchType["props"];
@@ -54,20 +54,26 @@ const TimePickerDefaultProps: TimePickerProps = {
   allowClear: true,
 };
 
-function SearchBarItem({ el, em, props, value: _value, onChange }: SearchBarItemProps) {
+function SearchBarItem({
+  el,
+  em,
+  props,
+  value: _value,
+  onChange,
+  onListen,
+}: SearchBarItemProps) {
   const [value, setValue] = useState<any>(_value);
   const { run } = useDebounceFn(() => onChange(value), MSecsEnum.MS300);
 
   useEffect(() => {
     switch (el) {
-      case "select":
-      case "date-picker":
-      case "time-picker":
-        onChange(value);
+      case "input":
+      case "input-number":
+        run();
         break;
 
       default:
-        run();
+        onChange(value);
         break;
     }
   }, [value, el]);

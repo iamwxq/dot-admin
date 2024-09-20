@@ -42,7 +42,7 @@ function Login() {
     {
       title: "性别",
       dataIndex: "gender",
-      enum: ProTableUtil.getEnum("gender", { 2: { disabled: true } }),
+      enum: ProTableUtil.getEnum("gender", { 0: { disabled: true } }),
       search: {
         type: "select",
         props: {},
@@ -93,6 +93,6 @@ function Login() {
       />
     </div>
   );
-};
+}
 
 export default Login;

@@ -9,7 +9,7 @@ import { signInRes } from "./data";
 /**
  * @description 登录
  */
-const signin: HttpHandler = HttpMock.post(AuthUrl.SIGNIN, async ({ request }) => {
+const signin: HttpHandler = HttpMock.post(AuthUrl.SIGN_IN, async ({ request }) => {
   const payload = await request.json() as SignInParams;
 
   if (payload.username === "admin" && payload.password === "288c33d314ab3c6a73b7768a6df2ddfd")

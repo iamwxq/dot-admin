@@ -13,7 +13,7 @@ export class ProTableUtil {
     const dict = dicts[name];
 
     for (const [k, label] of Object.entries(dict)) {
-      const value = <Exclude<keyof typeof dicts[T], symbol>>(Number.isNaN(Number(k)) ? k : Number(k));
+      const value = <Exclude<ValueOfDict<T>, symbol>>(Number.isNaN(Number(k)) ? k : Number(k));
       e.push({ value, label, ...options?.[value] });
     }
 

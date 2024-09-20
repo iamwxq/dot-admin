@@ -2,11 +2,11 @@ import type { ProColumnsProps, ProColumnType, RecordType } from "#/components/pr
 import type { SearchBarRef } from "#/components/search-bar";
 import type { Ref } from "react";
 import { DateFormatEnum } from "#/enums/format";
-
 import styles from "@/components/search-bar/search-bar.module.scss";
 import SearchBarItem from "@/components/search-bar/search-bar-item";
 import { filterEmptyProperty } from "@/utils";
-import { Flex } from "antd";
+import { DeleteOutlined } from "@ant-design/icons";
+import { Button, Flex } from "antd";
 
 import dayjs from "dayjs";
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from "react";
@@ -26,28 +26,31 @@ function UnforwardSearchBar<T extends RecordType>({
   params: _params,
   listen,
 }: SearchBarProps<T>, ref: Ref<SearchBarRef<T>>) {
-  // props
   const cols = useMemo(() => items.map((col: ProColumnType<T>) => ({ ...col, search: col.search! })).sort(_colsSortFn), [items]);
   const props = useMemo(() => cols.map((col: ProColumnType<T>) => col.search?.key ?? col.dataIndex) as Array<string>, [items]);
 
-  // states
   const [params, setParams] = useState<T>(_params ?? {} as T);
 
-  // methods
   const handleUpdateParams = useCallback((label: string, value: any) => {
     let _value = value;
     if (dayjs.isDayjs(_value))
       _value = dayjs(_value).format(DateFormatEnum.YYYYMMDDHHmmss);
 
     setParams((prev) => {
-      if (!(prev instanceof Object))
+      if (typeof prev !== "object")
         return prev;
 
       return filterEmptyProperty({ ...prev, [label]: _value }) as T;
     });
   }, []);
 
-  // handles
+  const reset = () => {
+    const origin: typeof _params = _params ?? {} as T;
+    // for (const [k, v] of Object.entries(origin)) {
+    //
+    // }
+  };
+
   useImperativeHandle(ref, () => ({
     params,
     search: () => {},
@@ -89,6 +92,13 @@ function UnforwardSearchBar<T extends RecordType>({
             </Flex>
           );
         })}
+
+        <Button
+          className={styles["clear-button"]}
+          icon={<DeleteOutlined />}
+          shape="circle"
+          // onClick={resetParams}
+        />
       </Flex>
     </div>
   );

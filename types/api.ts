@@ -14,10 +14,10 @@ export interface PParam<T> {
 }
 
 export interface PRes<T> {
-  size: number;
-  total: number;
   current: number;
   list: Array<T>;
+  size: number;
+  total: number;
 }
 
 export type APIParam<T extends (params: any) => Promise<any>> = Parameters<T>["0"];

@@ -6,7 +6,7 @@ import { HttpMock } from "@/mocks";
 import { HttpResponse } from "msw";
 import { userRow } from "./data";
 
-const userPage: HttpHandler = HttpMock.get(UserUrl.Page, ({ request }) => {
+const userPage: HttpHandler = HttpMock.get(UserUrl.PAGE, ({ request }) => {
   const url = new URL(request.url);
   const params = url.searchParams;
 
